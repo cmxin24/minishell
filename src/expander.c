@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:47:12 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 14:57:17 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:45:23 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static char	*ft_strip_quotes(char *str, int len)
 	return (new_str[j] = '\0', new_str);
 }
 
-void	ft_expander(t_cmd *cmd_list, t_env **envp)
+void	ft_expander(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 	int		i;
@@ -77,7 +77,7 @@ void	ft_expander(t_cmd *cmd_list, t_env **envp)
 			i = 0;
 			while (cmd->content[i])
 			{
-				old_str = expand_token_str(cmd->content[i], envp);
+				old_str = expand_token_str(cmd->content[i], env);
 				free(cmd->content[i]);
 				cmd->content[i] = old_str;
 				old_str = ft_strip_quotes(cmd->content[i], 0);

@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 19:45:59 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:45:07 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	exit(1);
 }
 
-void	ft_executor(t_cmd *cmd_list, t_env **envp)
+void	ft_executor(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*current;
 	int		pipe_fd[2];
@@ -145,7 +145,7 @@ void	ft_executor(t_cmd *cmd_list, t_env **envp)
 	{
 		if (ft_builtin_redirect(current, &saved_stdout) == 0)
 		{
-			g_signal = exec_builtin(current->content, envp);
+			g_signal = exec_builtin(current->content, env);
 			ft_restore_stdout(saved_stdout);
 		}
 		else
@@ -169,7 +169,7 @@ void	ft_executor(t_cmd *cmd_list, t_env **envp)
 			return ;
 		}
 		if (pid == 0)
-			child_process(current, envp, pipe_fd, fd_in);
+			child_process(current, env, pipe_fd, fd_in);
 		else
 		{
 			if (current->next)

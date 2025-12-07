@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:35:43 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:44:31 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int	ft_exit(char **args, t_env *env)
 	return (0);
 }
 
-int	ft_cd(char **args, t_env **envp)
+int	ft_cd(char **args, t_env **env)
 {
 	char	*path;
 	char	cwd[1024];
 
 	if (args[1] == NULL)
 	{
-		path = ft_get_env_value(*envp, "HOME");
+		path = ft_get_env_value(*env, "HOME");
 		if (path == NULL || *path == '\0')
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
@@ -46,20 +46,20 @@ int	ft_cd(char **args, t_env **envp)
 	else
 		path = args[1];
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		ft_set_env_value(envp, "OLDPWD", cwd);
+		ft_set_env_value(env, "OLDPWD", cwd);
 	if (chdir(path) != 0)
 		return (perror("cd"), 1);
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		ft_set_env_value(envp, "PWD", cwd);
+		ft_set_env_value(env, "PWD", cwd);
 	return (0);
 }
 
-int	ft_env(t_env *envp)
+int	ft_env(t_env *env)
 {
-	while (envp)
+	while (env)
 	{
-		printf("%s=%s\n", envp->key, envp->value);
-		envp = envp->next;
+		printf("%s=%s\n", env->key, env->value);
+		env = env->next;
 	}
 	return (0);
 }

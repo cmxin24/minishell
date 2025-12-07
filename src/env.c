@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:33:29 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 15:00:35 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:44:48 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static t_env	*ft_new_env_node(char *str)
 	return (new_node);
 }
 
-t_env *ft_init_env(char **envp)
+t_env *ft_init_env(char **env)
 {
 	t_env	*list;
 	t_env	*current;
@@ -42,9 +42,9 @@ t_env *ft_init_env(char **envp)
 	list = NULL;
 	current = NULL;
 	i = 0;
-	while (envp[i])
+	while (env[i])
 	{
-		new = ft_new_env_node(envp[i]);
+		new = ft_new_env_node(env[i]);
 		if (!list)
 		{
 			list = new;

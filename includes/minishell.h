@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:32:34 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:44:01 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,15 @@ char	**ft_env_list_to_array(t_env *env_list);
 
 // built-in functions
 int		ft_pwd(void);
-int		ft_env(t_env *envp);
-int		ft_cd(char **args, t_env **envp);
+int		ft_env(t_env *env);
+int		ft_cd(char **args, t_env **env);
 int		ft_exit(char **args, t_env *env);
 int		echo_n_flag(char *str);
 int		ft_echo(char **args);
-int		ft_export(char **args, t_env **envp);
-int		ft_unset(char **args, t_env **envp);
+int		ft_export(char **args, t_env **env);
+int		ft_unset(char **args, t_env **env);
 int		is_builtin(char *cmd);
-int		exec_builtin(char **args, t_env **envp);
+int		exec_builtin(char **args, t_env **env);
 
 // parser functions
 t_cmd	*ft_parser(t_token *tokens);
@@ -92,13 +92,13 @@ void	ft_free_cmd_list(t_cmd *cmd);
 void	ft_redirection(t_cmd *cmd, t_token **token);
 
 // executor functions
-void	ft_executor(t_cmd *cmd_list, t_env **envp);
+void	ft_executor(t_cmd *cmd_list, t_env **env);
 int		ft_builtin_redirect(t_cmd *cmd, int *saved_stdout);
 void	ft_restore_stdout(int saved_stdout);
 
 // expander functions
 char	*expand_token_str(char *str, t_env **env);
-void	ft_expander(t_cmd *cmd_list, t_env **envp);
+void	ft_expander(t_cmd *cmd_list, t_env **env);
 
 // tools functions
 void	ft_free_array(char **array);

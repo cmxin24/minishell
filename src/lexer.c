@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:25:16 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 19:14:46 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:45:48 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static int	handle_operator(char *line, int i, t_token **t)
 	return (i);
 }
 
-static int	handle_word(char *line, int i, t_token **head)
+static int	handle_word(char *line, int i, t_token **list)
 {
 	int		start;
 	char	quote;
@@ -99,7 +99,7 @@ static int	handle_word(char *line, int i, t_token **head)
 		return (ft_putstr_fd("minishell: syntax error: \
 			unclosed quote\n", 2), -1);
 	word = ft_substr(line, start, i - start);
-	return (add_token(head, create_token(word, WORD)), i);
+	return (add_token(list, create_token(word, WORD)), i);
 }
 
 t_token	*ft_lexer(char *line)
