@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 17:52:17 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 19:45:59 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 {
 	char	*path;
 	char	**env_array;
+	int		fd;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -85,6 +86,33 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
+	}
+	if (cmd->redirect_in)
+	{
+		fd = open(cmd->redirect_in, O_RDONLY);
+		if (fd == -1)
+		{
+			perror(cmd->redirect_in);
+			ft_free_array(env_array);
+			exit(1);
+		}
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
+	if (cmd->redirect_out)
+	{
+		if (cmd->is_append)
+			fd = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		else
+			fd = open(cmd->redirect_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd == -1)
+		{
+			perror(cmd->redirect_out);
+			ft_free_array(env_array);
+			exit(1);
+		}
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
 	}
 	if (is_builtin(cmd->content[0]))
 	{
@@ -109,12 +137,19 @@ void	ft_executor(t_cmd *cmd_list, t_env **envp)
 	int		pipe_fd[2];
 	int		fd_in;
 	pid_t	pid;
+	int		saved_stdout;
 
 	current = cmd_list;
 	fd_in = 0;
 	if (!current->next && is_builtin(current->content[0]))
 	{
-		exec_builtin(current->content, envp);
+		if (ft_builtin_redirect(current, &saved_stdout) == 0)
+		{
+			g_signal = exec_builtin(current->content, envp);
+			ft_restore_stdout(saved_stdout);
+		}
+		else
+			g_signal = 1;
 		return ;
 	}
 	while (current)

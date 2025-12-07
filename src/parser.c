@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 17:12:28 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 19:14:53 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,13 @@ static int	ft_count_args(t_token *token)
 	i = 0;
 	while (token && token->type != PIPE)
 	{
-		if (token->type == WORD)
+		if (token->type == REDIRECT_IN || token->type == REDIRECT_OUT
+			|| token->type == APPEND || token->type == HEREDOC)
+		{
+			if (token->next)
+				token = token->next;
+		}
+		else if (token->type == WORD)
 			i++;
 		token = token->next;
 	}
@@ -56,9 +62,12 @@ static t_cmd	*parse_single_command(t_token **temp)
 	{
 		if ((*temp)->type == WORD)
 			cmd->content[i++] = ft_strdup((*temp)->content);
-		*temp = (*temp)->next;
+		else if ((*temp)->type == REDIRECT_IN || (*temp)->type == REDIRECT_OUT
+			|| (*temp)->type == APPEND || (*temp)->type == HEREDOC)
+			ft_redirection(cmd, temp);
+		if (*temp)
+			*temp = (*temp)->next;
 	}
-	//TODO
 	cmd->content[i] = NULL;
 	return (cmd);
 }

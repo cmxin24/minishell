@@ -6,7 +6,7 @@
 #    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/07 17:56:01 by xin              ###   ########.fr        #
+#    Updated: 2025/12/07 19:46:16 by xin              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,9 @@ SRCS 		:=	src/main.c			\
 				src/lexer_2.c		\
 				src/token.c			\
 				src/parser.c		\
+				src/parser_2.c		\
 				src/executor.c		\
+				src/executor_2.c	\
 				src/expander.c		\
 				src/expander_2.c	\
 				src/env.c			\

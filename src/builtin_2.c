@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:15:11 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 15:59:00 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:36:24 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,25 @@ int	exec_builtin(char **args, t_env **env)
 		return (ft_export(args, env));
 	if (ft_strncmp(args[0], "unset", 6) == 0)
 		return (ft_unset(args, env));
+	if (ft_strncmp(args[0], "echo", 5) == 0)
+		return (ft_echo(args));
 	return (0);
+}
+
+int	echo_n_flag(char *str)
+{
+	int	i;
+
+	if (str[0] != '-')
+		return (0);
+	if (str[1] != 'n')
+		return (0);
+	i = 1;
+	while (str[i])
+	{
+		if (str[i] !=  'n')
+			return (0);
+		i++;
+	}
+	return (1);
 }

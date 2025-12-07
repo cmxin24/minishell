@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 17:34:49 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:32:34 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <termios.h>
+# include <fcntl.h>
 # include "../lib/includes/libft.h"
 
 extern int g_signal;
@@ -47,9 +48,9 @@ typedef struct s_token
 typedef struct s_cmd
 {
 	char			**content;
-	char			*redirection_in;
-	char			*redirection_out;
-	int				*is_append;
+	char			*redirect_in;
+	char			*redirect_out;
+	int				is_append;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -78,7 +79,8 @@ int		ft_pwd(void);
 int		ft_env(t_env *envp);
 int		ft_cd(char **args, t_env **envp);
 int		ft_exit(char **args, t_env *env);
-// TODO int		ft_echo(char **args);
+int		echo_n_flag(char *str);
+int		ft_echo(char **args);
 int		ft_export(char **args, t_env **envp);
 int		ft_unset(char **args, t_env **envp);
 int		is_builtin(char *cmd);
@@ -87,9 +89,12 @@ int		exec_builtin(char **args, t_env **envp);
 // parser functions
 t_cmd	*ft_parser(t_token *tokens);
 void	ft_free_cmd_list(t_cmd *cmd);
+void	ft_redirection(t_cmd *cmd, t_token **token);
 
 // executor functions
 void	ft_executor(t_cmd *cmd_list, t_env **envp);
+int		ft_builtin_redirect(t_cmd *cmd, int *saved_stdout);
+void	ft_restore_stdout(int saved_stdout);
 
 // expander functions
 char	*expand_token_str(char *str, t_env **env);
@@ -104,6 +109,7 @@ void	add_token(t_token **token_list, t_token *new_token);
 void	ft_free_tokens(t_token **token_list);
 
 // lexer functions
+int		syntax_error(char *token);
 int		ft_is_separator(char c);
 t_token	*ft_lexer(char *line);
 

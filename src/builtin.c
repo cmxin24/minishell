@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 16:46:57 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 20:35:43 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_exit(char **args, t_env *env)
 	int exit_status;
 	
 	exit_status = 0;
+
+
 	printf("exit\n");
 	if (args[1])
 	{
@@ -78,8 +80,26 @@ int	ft_pwd(void)
 	}
 }
 
-int	ft_echo()
+int	ft_echo(char **args)
 {
-	//TODO
+	int	i;
+	int	newline;
+
+	i = 1;
+	newline = 1;
+	while (args[i] && echo_n_flag(args[i]))
+	{
+		newline = 0;
+		i++;
+	}
+	while (args[i])
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1])
+			write(1, " ", 1);
+		i++;
+	}
+	if (newline)
+		write(1, "\n", 1);
 	return (0);
 }

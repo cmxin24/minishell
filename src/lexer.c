@@ -6,13 +6,13 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:25:16 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 00:07:20 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 19:14:46 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	syntax_error(char *token)
+int	syntax_error(char *token)
 {
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	ft_putstr_fd(token, 2);
