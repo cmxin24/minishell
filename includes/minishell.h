@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 15:43:47 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 16:31:00 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,9 @@ int		ft_pwd(void);
 int		ft_env(t_env *envp);
 int		ft_cd(char **args, t_env **envp);
 int		ft_exit(char **args, t_env *env);
+// TODO int		ft_echo(char **args);
+int		ft_export(char **args, t_env **envp);
+int		ft_unset(char **args, t_env **envp);
 int		is_builtin(char *cmd);
 int		exec_builtin(char **args, t_env **envp);
 
