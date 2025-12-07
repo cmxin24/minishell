@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/06 17:30:03 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 17:12:28 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static t_cmd	*parse_single_command(t_token **temp)
 			cmd->content[i++] = ft_strdup((*temp)->content);
 		*temp = (*temp)->next;
 	}
+	//TODO
 	cmd->content[i] = NULL;
 	return (cmd);
 }

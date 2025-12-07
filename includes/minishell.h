@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 16:31:00 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 17:34:49 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <signal.h>
+# include <termios.h>
 # include "../lib/includes/libft.h"
+
+extern int g_signal;
 
 typedef enum e_type_of_token
 {
@@ -43,15 +47,23 @@ typedef struct s_token
 typedef struct s_cmd
 {
 	char			**content;
+	char			*redirection_in;
+	char			*redirection_out;
+	int				*is_append;
 	struct s_cmd	*next;
 }	t_cmd;
 
 typedef struct s_env
 {
-	char	*key;
-	char	*value;
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+// signal functions
+void	ft_disable_echo_ctl(void);
+void	ft_init_signals(void);
+void	ft_handle_sigint(int sig);
 
 // environment functions
 t_env	*ft_init_env(char **envp);

@@ -6,11 +6,32 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 16:18:31 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 17:52:17 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static void	ft_wait_for_children(void)
+{
+	int	status;
+
+	signal(SIGINT, SIG_IGN);
+	while (waitpid(-1, &status, 0) > 0)
+	{
+		if (WIFEXITED(status))
+			g_signal = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			g_signal = 128 + WEXITSTATUS(status);
+			if (WTERMSIG(status) == SIGQUIT)
+				write(1, "Quit: 3\n", 8);
+			else if (WTERMSIG(status) == SIGINT)
+				write(1, "\n", 1);
+		}
+	}
+	ft_init_signals();
+}
 
 char	*find_command_path(char *cmd, char **envp)
 {
@@ -51,6 +72,8 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	char	*path;
 	char	**env_array;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	env_array = ft_env_list_to_array(*envp);
 	if (fd_in != 0)
 	{
@@ -66,6 +89,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	if (is_builtin(cmd->content[0]))
 	{
 		int exit_code = exec_builtin(cmd->content, envp);
+		ft_free_array(env_array);
 		exit(exit_code);
 	}
 	path = find_command_path(cmd->content[0], env_array);
@@ -122,6 +146,5 @@ void	ft_executor(t_cmd *cmd_list, t_env **envp)
 		}
 		current = current->next;
 	}
-	while (wait(NULL) > 0)
-		;
+	ft_wait_for_children();
 }

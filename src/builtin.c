@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 16:09:00 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 16:46:57 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int	ft_exit(char **args, t_env *env)
 {
-	int exit_status = 0;
-
+	int exit_status;
+	
+	exit_status = 0;
 	printf("exit\n");
-
 	if (args[1])
 	{
 		// exit_status = ft_atoi(args[1]);
@@ -78,3 +78,8 @@ int	ft_pwd(void)
 	}
 }
 
+int	ft_echo()
+{
+	//TODO
+	return (0);
+}

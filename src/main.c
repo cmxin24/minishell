@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 15:34:58 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/07 17:35:35 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	ft_init_signals();
+	ft_disable_echo_ctl();
 	env_list = ft_init_env(envp);
 	while (1)
 	{
+		if (g_signal)
+			g_signal = 0;
 		line = readline("minishell$ ");
 		if (!line)
 			break ;
@@ -63,7 +67,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		cmd_list = ft_parser(token_list);
 		ft_expander(cmd_list, &env_list);
-		print_commands(cmd_list);
+		//print_commands(cmd_list);
 		if (cmd_list && cmd_list->content && cmd_list->content[0])
 			ft_executor(cmd_list, &env_list);
 		free(line);

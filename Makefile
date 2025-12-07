@@ -6,13 +6,24 @@
 #    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/07 15:51:46 by xin              ###   ########.fr        #
+#    Updated: 2025/12/07 17:56:01 by xin              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 
-CFLAGS		= 	-Wall -Werror -Wextra -Iincludes
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+	RL_INC =
+	RL_LIB = -lreadline
+else ifeq ($(UNAME), Darwin)
+	RL_PATH := /opt/homebrew/opt/readline
+	RL_INC = -I$(RL_PATH)/include
+	RL_LIB = -L$(RL_PATH)/lib -lreadline
+endif
+
+CFLAGS		= 	-Wall -Werror -Wextra $(RL_INC)
 
 LIBFT		=	libft.a
 LIB_DIR		=	lib/libft
@@ -29,6 +40,7 @@ SRCS 		:=	src/main.c			\
 				src/env_2.c			\
 				src/builtin.c		\
 				src/builtin_2.c		\
+				src/signal.c		\
 				src/free.c
 
 OBJ := $(SRCS:src/%.c=build/minishell/%.o)
@@ -38,8 +50,8 @@ OBJ := $(SRCS:src/%.c=build/minishell/%.o)
 all: $(LIB_DIR)/$(LIBFT) $(NAME)
 
 $(NAME): $(OBJ) $(LIB_DIR)/$(LIBFT)
-	cc $(CFLAGS) -lreadline $^ -o $@
-	
+	cc $(CFLAGS) $(RL_LIB) $^ -o $@
+
 build/minishell/%.o: src/%.c
 	@mkdir -p $(dir $@)
 	cc $(CFLAGS) -c $< -o $@
