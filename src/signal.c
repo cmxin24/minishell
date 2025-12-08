@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:45:58 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 19:14:35 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/08 23:52:35 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ft_disable_echo_ctl(void)
 void	ft_handle_sigint(int signum)
 {
 	(void)signum;
-	g_signal = 1;
+	g_signal = 130;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);

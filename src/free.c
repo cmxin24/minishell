@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:55 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 19:15:17 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/08 21:26:16 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	ft_free_cmd_list(t_cmd *cmd)
 	{
 		tmp = cmd->next;
 		ft_free_array(cmd->content);
+		if (cmd->is_heredoc && cmd->redirect_in)
+			unlink(cmd->redirect_in);
 		if (cmd->redirect_in)
 			free(cmd->redirect_in);
 		if (cmd->redirect_out)

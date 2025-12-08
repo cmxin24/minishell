@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:44:01 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/08 23:27:33 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,41 +25,47 @@
 # include <fcntl.h>
 # include "../lib/includes/libft.h"
 
-extern int g_signal;
+extern int	g_signal;
 
 typedef enum e_type_of_token
 {
-	WORD, // normal word
-	PIPE, // | the stdout of the left cmd is connected to stdin of the right cmd
-	REDIRECT_IN, // < use file as stdin
-	REDIRECT_OUT, // > use file as stdout, 
-	APPEND, // >> append to file
-	HEREDOC, // << here document, use muti-line input as stdin
-	TOKEN_EOF // end of input
+	WORD,
+	PIPE,
+	REDIRECT_IN,
+	REDIRECT_OUT,
+	APPEND,
+	HEREDOC,
+	TOKEN_EOF
 }	t_type_of_token;
 
-typedef struct s_token
+typedef struct	s_token
 {
-	char				*content;
-	t_type_of_token		type;
-	struct s_token		*next;
+	char			*content;
+	t_type_of_token	type;
+	struct s_token	*next;
 }	t_token;
 
-typedef struct s_cmd
+typedef struct	s_cmd
 {
 	char			**content;
 	char			*redirect_in;
 	char			*redirect_out;
 	int				is_append;
+	int				is_heredoc;
+	int				heredoc_quoted;
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct s_env
+typedef struct	s_env
 {
 	char			*key;
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+// heredoc functions
+int		ft_heredoc(t_cmd *cmd, char *delimiter, t_env *env, int quotes);
+char	*expand_heredoc_line(char *line, t_env *env);
 
 // signal functions
 void	ft_disable_echo_ctl(void);
@@ -85,6 +91,9 @@ int		ft_export(char **args, t_env **env);
 int		ft_unset(char **args, t_env **env);
 int		is_builtin(char *cmd);
 int		exec_builtin(char **args, t_env **env);
+int		ft_is_valid_identifier(char *str);
+void	ft_indentifier_error(char *cmd, char *arg);
+int		ft_check_exit(char *str);
 
 // parser functions
 t_cmd	*ft_parser(t_token *tokens);
@@ -95,8 +104,11 @@ void	ft_redirection(t_cmd *cmd, t_token **token);
 void	ft_executor(t_cmd *cmd_list, t_env **env);
 int		ft_builtin_redirect(t_cmd *cmd, int *saved_stdout);
 void	ft_restore_stdout(int saved_stdout);
+int		ft_process_heredoc(t_cmd *cmd, t_env *env);
 
 // expander functions
+int		ft_len_without_quotes(char *str);
+char	*ft_strip_quotes(char *str, int len);
 char	*expand_token_str(char *str, t_env **env);
 void	ft_expander(t_cmd *cmd_list, t_env **env);
 

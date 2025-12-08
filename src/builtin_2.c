@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:15:11 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:36:24 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/08 23:18:14 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,56 @@
 
 int ft_export(char **args, t_env **env)
 {
-	int i;
-	char *key;
-	char *value;
-	char *equal_sign;
+	int		i;
+	char	*key;
+	char	*equal_sign;
+	int		exit_status;
 
+	exit_status = 0;
 	if (!args[1])
 		return (0);
 	i = 1;
 	while (args[i])
 	{
-		equal_sign = ft_strchr(args[i], '=');
-		if (equal_sign)
+		if (!ft_is_valid_identifier(args[i]))
 		{
-			*equal_sign = '\0';
-			key = args[i];
-			value = equal_sign + 1;
-			ft_set_env_value(env, key, value);
-			*equal_sign = '=';
+			ft_indentifier_error("export", args[i]);
+			exit_status = 1;
+		}
+		else
+		{
+			equal_sign = ft_strchr(args[i], '=');
+			if (equal_sign)
+			{
+				*equal_sign = '\0';
+				key = args[i];
+				ft_set_env_value(env, key, equal_sign + 1);
+				*equal_sign = '=';
+			}
 		}
 		i++;
 	}
-	return (0);
+	return (exit_status);
 }
 
 int ft_unset(char **args, t_env **env)
 {
 	int	i;
+	int	exit_status;
 	
 	i = 1;
 	while (args[i])
 	{
-		ft_unset_env(env, args[i]);
+		if (!ft_is_valid_identifier(args[i]) || ft_strchr(args[i], '='))
+		{
+			ft_indentifier_error("unset", args[i]);
+			exit_status = 1;
+		}
+		else
+			ft_unset_env(env, args[i]);
 		i++;
 	}
-	return (0);
+	return (exit_status);
 }
 
 int	is_builtin(char *cmd)

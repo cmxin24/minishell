@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:44:31 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/08 23:42:45 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,30 @@
 
 int	ft_exit(char **args, t_env *env)
 {
-	int exit_status;
-	
-	exit_status = 0;
+	int	exit_code;
 
-
+	exit_code = 0;
 	printf("exit\n");
 	if (args[1])
 	{
-		// exit_status = ft_atoi(args[1]);
+		if (!ft_check_exit(args[1]))
+		{
+			ft_putstr_fd("minishell: exit: ", 2);
+			ft_putstr_fd(args[1], 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
+			exit(255);
+		}
+		else if (args[2])
+		{
+			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+			return (1);
+		}
+		exit_code = ft_atoi(args[1]) % 256;
+		ft_free_env_list(env);
+		exit(exit_code);
 	}
 	ft_free_env_list(env);
-	exit(exit_status);
+	exit(exit_code);
 	return (0);
 }
 

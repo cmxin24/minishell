@@ -6,13 +6,13 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:47:12 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:45:23 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/08 19:27:19 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	ft_len_without_quotes(char *str)
+int	ft_len_without_quotes(char *str)
 {
 	int		len;
 	int		i;
@@ -34,7 +34,7 @@ static int	ft_len_without_quotes(char *str)
 	return (len);
 }
 
-static char	*ft_strip_quotes(char *str, int len)
+char	*ft_strip_quotes(char *str, int len)
 {
 	char	*new_str;
 	int		i;

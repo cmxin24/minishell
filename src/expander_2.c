@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:44:00 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 16:01:56 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/08 23:59:06 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char *expand_token_str(char *str, t_env **env)
 			i++;
 			int var_len = get_var_len(&str[i]);
 			if (var_len == 1 && str[i] == '?')
-				var_value = ft_itoa(0); //TODO: replace 0 with actual exit status
+				var_value = ft_itoa(g_signal);
 			else
 			{
 				var_key = ft_substr(str, i, var_len);
