@@ -6,11 +6,11 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 15:53:28 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 15:54:47 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:11:45 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int ft_strcmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
 	while (*s1 && (*s1 == *s2))
 	{

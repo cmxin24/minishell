@@ -6,13 +6,13 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:44:00 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 23:59:06 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:20:31 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int  get_var_len(char *str)
+static int	get_var_len(char *str)
 {
 	int	i;
 
@@ -24,7 +24,7 @@ static int  get_var_len(char *str)
 	return (i);
 }
 
-char *expand_token_str(char *str, t_env **env)
+char	*expand_token_str(char *str, t_env **env)
 {
 	char	*result;
 	char	*temp;
@@ -34,6 +34,9 @@ char *expand_token_str(char *str, t_env **env)
 	int		i;
 	int		start;
 	int		in_single_quote;
+	char	*new_result;
+	char	*final_result;
+	int		var_len;
 
 	result = ft_strdup("");
 	i = 0;
@@ -43,14 +46,16 @@ char *expand_token_str(char *str, t_env **env)
 	{
 		if (str[i] == '\'')
 			in_single_quote = !in_single_quote;
-		if (str[i] == '$' && !in_single_quote && str[i + 1] && str[i + 1] != ' ')
+		if (str[i] == '$' && !in_single_quote && str[i + 1]
+			&& str[i + 1] != ' ')
 		{
 			temp = ft_substr(str, start, i - start);
-			char *new_result = ft_strjoin(result, temp);
-			free(result); free(temp);
+			new_result = ft_strjoin(result, temp);
+			free(result);
+			free(temp);
 			result = new_result;
 			i++;
-			int var_len = get_var_len(&str[i]);
+			var_len = get_var_len(&str[i]);
 			if (var_len == 1 && str[i] == '?')
 				var_value = ft_itoa(g_signal);
 			else
@@ -64,7 +69,8 @@ char *expand_token_str(char *str, t_env **env)
 				free(var_key);
 			}
 			new_result = ft_strjoin(result, var_value);
-			free(result); free(var_value);
+			free(result);
+			free(var_value);
 			result = new_result;
 			i += var_len;
 			start = i;
@@ -73,7 +79,8 @@ char *expand_token_str(char *str, t_env **env)
 			i++;
 	}
 	temp = ft_substr(str, start, i - start);
-	char *final_result = ft_strjoin(result, temp);
-	free(result); free(temp);
+	final_result = ft_strjoin(result, temp);
+	free(result);
+	free(temp);
 	return (final_result);
 }

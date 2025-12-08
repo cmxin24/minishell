@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:07:08 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:10:41 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		cmd_list = ft_parser(token_list);
 		ft_expander(cmd_list, &env_list);
-		//print_commands(cmd_list);
 		if (cmd_list)
 			ft_executor(cmd_list, &env_list);
 		free(line);

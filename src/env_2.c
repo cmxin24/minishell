@@ -6,16 +6,16 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 14:19:10 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 14:47:57 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:13:12 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void ft_set_env_value(t_env **env, char *key, char *value)
+void	ft_set_env_value(t_env **env, char *key, char *value)
 {
-	t_env *temp;
-	t_env *new;
+	t_env	*temp;
+	t_env	*new;
 
 	temp = *env;
 	while (temp)
@@ -35,7 +35,7 @@ void ft_set_env_value(t_env **env, char *key, char *value)
 	*env = new;
 }
 
-void ft_unset_env(t_env **env, char *key)
+void	ft_unset_env(t_env **env, char *key)
 {
 	t_env	*current;
 	t_env	*prev;

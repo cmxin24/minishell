@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:02:55 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:12:26 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	char	*path;
 	char	**env_array;
 	int		fd;
+	int		exit_code;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -121,7 +122,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	}
 	if (is_builtin(cmd->content[0]))
 	{
-		int exit_code = exec_builtin(cmd->content, envp);
+		exit_code = exec_builtin(cmd->content, envp);
 		ft_free_array(env_array);
 		exit(exit_code);
 	}

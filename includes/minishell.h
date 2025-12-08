@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 23:27:33 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:18:59 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,16 @@ typedef enum e_type_of_token
 	REDIRECT_OUT,
 	APPEND,
 	HEREDOC,
-	TOKEN_EOF
 }	t_type_of_token;
 
-typedef struct	s_token
+typedef struct s_token
 {
 	char			*content;
 	t_type_of_token	type;
 	struct s_token	*next;
 }	t_token;
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
 	char			**content;
 	char			*redirect_in;
@@ -56,7 +55,7 @@ typedef struct	s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	char			*key;
 	char			*value;

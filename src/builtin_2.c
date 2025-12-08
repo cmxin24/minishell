@@ -6,13 +6,13 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:15:11 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 23:18:14 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:19:40 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int ft_export(char **args, t_env **env)
+int	ft_export(char **args, t_env **env)
 {
 	int		i;
 	char	*key;
@@ -46,11 +46,11 @@ int ft_export(char **args, t_env **env)
 	return (exit_status);
 }
 
-int ft_unset(char **args, t_env **env)
+int	ft_unset(char **args, t_env **env)
 {
 	int	i;
 	int	exit_status;
-	
+
 	i = 1;
 	while (args[i])
 	{
@@ -117,7 +117,7 @@ int	echo_n_flag(char *str)
 	i = 1;
 	while (str[i])
 	{
-		if (str[i] !=  'n')
+		if (str[i] != 'n')
 			return (0);
 		i++;
 	}

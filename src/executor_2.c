@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:25:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 21:07:11 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:11:28 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	ft_process_heredoc(t_cmd *cmd, t_env *env)
 	{
 		if (current->is_heredoc)
 		{
-			if (ft_heredoc(current, current->redirect_in, env, current->heredoc_quoted) == -1)
+			if (ft_heredoc(current, current->redirect_in,
+					env, current->heredoc_quoted) == -1)
 			{
 				perror("heredoc");
 				return (-1);

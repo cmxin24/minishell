@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:33:29 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:44:48 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:15:39 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static t_env	*ft_new_env_node(char *str)
 	return (new_node);
 }
 
-t_env *ft_init_env(char **env)
+t_env	*ft_init_env(char **env)
 {
 	t_env	*list;
 	t_env	*current;
@@ -60,7 +60,7 @@ t_env *ft_init_env(char **env)
 	return (list);
 }
 
-char **ft_env_list_to_array(t_env *env)
+char	**ft_env_list_to_array(t_env *env)
 {
 	char	**arr;
 	t_env	*temp;
@@ -91,7 +91,7 @@ char **ft_env_list_to_array(t_env *env)
 	return (arr[i] = NULL, arr);
 }
 
-char *ft_get_env_value(t_env *env, char *key)
+char	*ft_get_env_value(t_env *env, char *key)
 {
 	while (env)
 	{
