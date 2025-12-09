@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:15:11 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:19:40 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 00:28:59 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	ft_unset(char **args, t_env **env)
 	int	exit_status;
 
 	i = 1;
+	exit_status = 0;
 	while (args[i])
 	{
 		if (!ft_is_valid_identifier(args[i]) || ft_strchr(args[i], '='))

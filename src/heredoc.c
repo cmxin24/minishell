@@ -62,19 +62,22 @@ static int	heredoc_input_loop(char *delimiter, int fd, t_env *env, int quotes)
 	return (0);
 }
 
-int	ft_heredoc(t_cmd *cmd, char *delimiter, t_env *env, int quotes)
+int	ft_heredoc(t_redir *redir, t_env *env)
 {
 	int		fd;
 	char	*filename;
+	char	*delimiter;
+	int		quotes;
 
+	delimiter = redir->file;
+	quotes = redir->heredoc_quoted;
 	filename = ft_heredoc_filename();
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (free(filename), -1);
 	heredoc_input_loop(delimiter, fd, env, quotes);
 	close(fd);
-	if (cmd->redirect_in)
-		free(cmd->redirect_in);
-	cmd->redirect_in = filename;
+	free(redir->file);
+	redir->file = filename;
 	return (0);
 }

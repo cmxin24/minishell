@@ -30,17 +30,24 @@ void	ft_free_array(char **array)
 void	ft_free_cmd_list(t_cmd *cmd)
 {
 	t_cmd	*tmp;
+	t_redir	*redir;
+	t_redir	*tmp_redir;
 
 	while (cmd)
 	{
 		tmp = cmd->next;
 		ft_free_array(cmd->content);
-		if (cmd->is_heredoc && cmd->redirect_in)
-			unlink(cmd->redirect_in);
-		if (cmd->redirect_in)
-			free(cmd->redirect_in);
-		if (cmd->redirect_out)
-			free(cmd->redirect_out);
+		redir = cmd->redirs;
+		while (redir)
+		{
+			tmp_redir = redir->next;
+			if (redir->type == REDIR_HEREDOC && redir->file)
+				unlink(redir->file);
+			if (redir->file)
+				free(redir->file);
+			free(redir);
+			redir = tmp_redir;
+		}
 		free(cmd);
 		cmd = tmp;
 	}

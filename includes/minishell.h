@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:18:59 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 23:11:52 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <signal.h>
 # include <termios.h>
 # include <fcntl.h>
@@ -44,14 +45,26 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef enum e_redir_type
+{
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_HEREDOC
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	char			*file;
+	t_redir_type	type;
+	int				heredoc_quoted;
+	struct s_redir	*next;
+}	t_redir;
+
 typedef struct s_cmd
 {
 	char			**content;
-	char			*redirect_in;
-	char			*redirect_out;
-	int				is_append;
-	int				is_heredoc;
-	int				heredoc_quoted;
+	t_redir			*redirs;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -63,7 +76,7 @@ typedef struct s_env
 }	t_env;
 
 // heredoc functions
-int		ft_heredoc(t_cmd *cmd, char *delimiter, t_env *env, int quotes);
+int		ft_heredoc(t_redir *redir, t_env *env);
 char	*expand_heredoc_line(char *line, t_env *env);
 
 // signal functions
@@ -101,8 +114,8 @@ void	ft_redirection(t_cmd *cmd, t_token **token);
 
 // executor functions
 void	ft_executor(t_cmd *cmd_list, t_env **env);
-int		ft_builtin_redirect(t_cmd *cmd, int *saved_stdout);
-void	ft_restore_stdout(int saved_stdout);
+int		ft_builtin_redirect(t_cmd *cmd, int *saved_stdout, int *saved_stdin);
+void	ft_restore_io(int saved_stdout, int saved_stdin);
 int		ft_process_heredoc(t_cmd *cmd, t_env *env);
 
 // expander functions

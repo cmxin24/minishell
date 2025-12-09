@@ -38,9 +38,25 @@ static char	*strip_heredoc_quotes(char *str)
 	return (new_str);
 }
 
+static void	ft_add_redir(t_cmd *cmd, t_redir *new)
+{
+	t_redir	*tmp;
+
+	if (!cmd->redirs)
+		cmd->redirs = new;
+	else
+	{
+		tmp = cmd->redirs;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
+
 void	ft_redirection(t_cmd *cmd, t_token **token)
 {
 	t_type_of_token	type;
+	t_redir			*new_redir;
 
 	type = (*token)->type;
 	*token = (*token)->next;
@@ -52,32 +68,30 @@ void	ft_redirection(t_cmd *cmd, t_token **token)
 			syntax_error((*token)->content);
 		return ;
 	}
+	new_redir = malloc(sizeof(t_redir));
+	if (!new_redir)
+		return ;
+	new_redir->next = NULL;
+	new_redir->heredoc_quoted = 0;
 	if (type == HEREDOC)
 	{
-		if (cmd->redirect_in)
-			free(cmd->redirect_in);
+		new_redir->type = REDIR_HEREDOC;
 		if (if_quotes((*token)->content))
-			cmd->heredoc_quoted = 1;
-		else
-			cmd->heredoc_quoted = 0;
-		cmd->redirect_in = strip_heredoc_quotes((*token)->content);
-		cmd->is_heredoc = 1;
+			new_redir->heredoc_quoted = 1;
+		new_redir->file = strip_heredoc_quotes((*token)->content);
 	}
 	else if (type == REDIRECT_IN)
 	{
-		if (cmd->redirect_in)
-			free(cmd->redirect_in);
-		cmd->redirect_in = ft_strdup((*token)->content);
-		cmd->is_heredoc = 0;
+		new_redir->type = REDIR_IN;
+		new_redir->file = ft_strdup((*token)->content);
 	}
 	else if (type == REDIRECT_OUT || type == APPEND)
 	{
-		if (cmd->redirect_out)
-			free(cmd->redirect_out);
-		cmd->redirect_out = ft_strdup((*token)->content);
 		if (type == APPEND)
-			cmd->is_append = 1;
+			new_redir->type = REDIR_APPEND;
 		else
-			cmd->is_append = 0;
+			new_redir->type = REDIR_OUT;
+		new_redir->file = ft_strdup((*token)->content);
 	}
+	ft_add_redir(cmd, new_redir);
 }

@@ -20,6 +20,7 @@ static t_cmd	*ft_new_cmd(void)
 	if (!new)
 		return (NULL);
 	new->content = NULL;
+	new->redirs = NULL;
 	new->next = NULL;
 	return (new);
 }

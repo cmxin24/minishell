@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:47:12 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 19:27:19 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/09 17:01:17 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,26 @@ char	*ft_strip_quotes(char *str, int len)
 	return (new_str[j] = '\0', new_str);
 }
 
+static void	remove_empty_arg(t_cmd *cmd, int index)
+{
+	int	i;
+
+	free(cmd->content[index]);
+	i = index;
+	while (cmd->content[i + 1])
+	{
+		cmd->content[i] = cmd->content[i + 1];
+		i++;
+	}
+	cmd->content[i] = NULL;
+}
+
 void	ft_expander(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 	int		i;
 	char	*old_str;
+	t_redir	*redir;
 
 	cmd = cmd_list;
 	while (cmd)
@@ -80,11 +95,30 @@ void	ft_expander(t_cmd *cmd_list, t_env **env)
 				old_str = expand_token_str(cmd->content[i], env);
 				free(cmd->content[i]);
 				cmd->content[i] = old_str;
+				if (cmd->content[i][0] == '\0')
+				{
+					remove_empty_arg(cmd, i);
+					continue ;
+				}
 				old_str = ft_strip_quotes(cmd->content[i], 0);
 				free(cmd->content[i]);
 				cmd->content[i] = old_str;
 				i++;
 			}
+		}
+		redir = cmd->redirs;
+		while (redir)
+		{
+			if (redir->type != REDIR_HEREDOC)
+			{
+				old_str = expand_token_str(redir->file, env);
+				free(redir->file);
+				redir->file = old_str;
+				old_str = ft_strip_quotes(redir->file, 0);
+				free(redir->file);
+				redir->file = old_str;
+			}
+			redir = redir->next;
 		}
 		cmd = cmd->next;
 	}
