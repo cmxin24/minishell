@@ -50,6 +50,11 @@ int	ft_cd(char **args, t_env **env)
 
 	print_path = 0;
 	alloc_path = NULL;
+	if (args[1] && args[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		return (1);
+	}
 	if (args[1] == NULL)
 	{
 		path = ft_get_env_value(*env, "HOME");
