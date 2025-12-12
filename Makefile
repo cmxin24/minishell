@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
+#    By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/10 14:58:17 by xin              ###   ########.fr        #
+#    Updated: 2025/12/12 17:10:24 by meyu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ OBJ := $(SRCS:src/%.c=build/minishell/%.o)
 all: $(LIB_DIR)/$(LIBFT) $(GNL_DIR)/$(GET_NEXT_LINE) $(NAME) 
 
 $(NAME): $(OBJ) $(LIB_DIR)/$(LIBFT) $(GNL_DIR)/$(GET_NEXT_LINE)
-	cc $(CFLAGS) $(RL_LIB) $^ -o $@
+	cc $(CFLAGS) $(OBJ) $(LIB_DIR)/$(LIBFT) $(GNL_DIR)/$(GET_NEXT_LINE) $(RL_LIB) -o $(NAME)
 
 build/minishell/%.o: src/%.c
 	@mkdir -p $(dir $@)
