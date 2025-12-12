@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:15:11 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 17:26:29 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 19:36:04 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,20 @@ int	ft_export(char **args, t_env **env)
 			equal_sign = ft_strchr(args[i], '=');
 			if (equal_sign)
 			{
-				*equal_sign = '\0';
-				key = args[i];
-				ft_set_env_value(env, key, equal_sign + 1);
-				*equal_sign = '=';
+				if (equal_sign > args[i] && *(equal_sign - 1) == '+')
+				{
+					*(equal_sign - 1) = '\0';
+					key = args[i];
+					ft_append_env_value(env, key, equal_sign + 1);
+					*(equal_sign - 1) = '+';
+				}
+				else
+				{
+					*equal_sign = '\0';
+					key = args[i];
+					ft_set_env_value(env, key, equal_sign + 1);
+					*equal_sign = '=';
+				}
 			}
 		}
 		i++;
@@ -125,11 +135,6 @@ int	ft_unset(char **args, t_env **env)
 		{
 			ft_indentifier_error("unset", args[i]);
 			exit_status = 2;
-		}
-		else if (!ft_is_valid_identifier(args[i]) || ft_strchr(args[i], '='))
-		{
-			ft_indentifier_error("unset", args[i]);
-			exit_status = 1;
 		}
 		else
 			ft_unset_env(env, args[i]);
@@ -166,7 +171,7 @@ int	exec_builtin(char **args, t_env **env)
 	if (ft_strncmp(args[0], "exit", 5) == 0)
 		return (ft_exit(args, *env));
 	if (ft_strncmp(args[0], "env", 4) == 0)
-		return (ft_env(*env));
+		return (ft_env(*env, args));
 	if (ft_strncmp(args[0], "pwd", 4) == 0)
 		return (ft_pwd());
 	if (ft_strncmp(args[0], "export", 7) == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 21:28:10 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 23:52:42 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 19:30:39 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	ft_is_valid_identifier(char *str)
 	i = 1;
 	while (str[i] && str[i] != '=')
 	{
+		if (str[i] == '+' && str[i + 1] == '=')
+			return (1);
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;

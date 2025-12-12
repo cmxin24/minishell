@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 16:28:29 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 19:25:15 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_exit(char **args, t_env *env)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
-			exit(255);
+			exit(2);
 		}
 		else if (args[2])
 		{
@@ -97,8 +97,15 @@ int	ft_cd(char **args, t_env **env)
 	return (0);
 }
 
-int	ft_env(t_env *env)
+int	ft_env(t_env *env, char **args)
 {
+	if (args[1])
+	{
+		ft_putstr_fd("env: ‘", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putstr_fd("’: No such file or directory\n", 2);
+		return (127);
+	}
 	while (env)
 	{
 		printf("%s=%s\n", env->key, env->value);

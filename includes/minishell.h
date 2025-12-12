@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/10 15:01:27 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 19:42:07 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,13 @@ t_env	*ft_init_env(char **envp);
 void	ft_free_env_list(t_env *env_list);
 char	*ft_get_env_value(t_env *env_list, char *key);
 void	ft_set_env_value(t_env **env_list, char *key, char *value);
+void	ft_append_env_value(t_env **env, char *key, char *value);
 void	ft_unset_env(t_env **env, char *key);
 char	**ft_env_list_to_array(t_env *env_list);
 
 // built-in functions
 int		ft_pwd(void);
-int		ft_env(t_env *env);
+int		ft_env(t_env *env, char **args);
 int		ft_cd(char **args, t_env **env);
 int		ft_exit(char **args, t_env *env);
 int		echo_n_flag(char *str);
