@@ -6,11 +6,69 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:15:11 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 13:46:58 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 17:26:29 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static void	ft_sort_env_array(t_env **arr, int count)
+{
+	int		i;
+	int		j;
+	t_env	*temp;
+
+	i = 0;
+	while (i < count - 1)
+	{
+		j = 0;
+		while (j < count - i - 1)
+		{
+			if (ft_strcmp(arr[j]->key, arr[j + 1]->key) > 0)
+			{
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+static void	ft_print_exported(t_env *env)
+{
+	t_env	**arr;
+	t_env	*temp;
+	int		count;
+	int		i;
+
+	count = 0;
+	temp = env;
+	while (temp)
+	{
+		count++;
+		temp = temp->next;
+	}
+	arr = malloc(sizeof(t_env *) * count);
+	if (!arr)
+		return ;
+	temp = env;
+	i = 0;
+	while (temp)
+	{
+		arr[i++] = temp;
+		temp = temp->next;
+	}
+	ft_sort_env_array(arr, count);
+	i = 0;
+	while (i < count)
+	{
+		printf("declare -x %s=\"%s\"\n", arr[i]->key, arr[i]->value);
+		i++;
+	}
+	free(arr);
+}
 
 int	ft_export(char **args, t_env **env)
 {
@@ -21,7 +79,10 @@ int	ft_export(char **args, t_env **env)
 
 	exit_status = 0;
 	if (!args[1])
+	{
+		ft_print_exported(*env);
 		return (0);
+	}
 	i = 1;
 	while (args[i])
 	{
