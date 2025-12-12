@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:15:11 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:28:59 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 13:46:58 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@ int	ft_export(char **args, t_env **env)
 	i = 1;
 	while (args[i])
 	{
-		if (!ft_is_valid_identifier(args[i]))
+		if (args[i][0] == '-' && args[i][1] != '\0')
+		{
+			ft_indentifier_error("export", args[i]);
+			exit_status = 2;
+		}
+		else if (!ft_is_valid_identifier(args[i]))
 		{
 			ft_indentifier_error("export", args[i]);
 			exit_status = 1;
@@ -55,7 +60,12 @@ int	ft_unset(char **args, t_env **env)
 	exit_status = 0;
 	while (args[i])
 	{
-		if (!ft_is_valid_identifier(args[i]) || ft_strchr(args[i], '='))
+		if (args[i][0] == '-' && args[i][1] != '\0')
+		{
+			ft_indentifier_error("unset", args[i]);
+			exit_status = 2;
+		}
+		else if (!ft_is_valid_identifier(args[i]) || ft_strchr(args[i], '='))
 		{
 			ft_indentifier_error("unset", args[i]);
 			exit_status = 1;

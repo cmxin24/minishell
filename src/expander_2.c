@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:44:00 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:28:10 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 16:37:35 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,61 @@ char	*expand_token_str(char *str, t_env **env)
 	int		i;
 	int		start;
 	int		in_single_quote;
+	int		in_double_quote;
 	char	*new_result;
 	char	*final_result;
 	int		var_len;
+	char	*home;
 
 	result = ft_strdup("");
 	i = 0;
-	start = 0;
+	if (str[0] == '~' && (str[1] == '\0' || str[1] == '/'))
+	{
+		home = ft_get_env_value(*env, "HOME");
+		if (home)
+		{
+			free(result);
+			result = ft_strdup(home);
+			i++;
+		}
+	}
+	start = i;
 	in_single_quote = 0;
+	in_double_quote = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == '\\' && !in_single_quote)
+		{
+			if (!in_double_quote)
+			{
+				i++;
+				if (str[i])
+					i++;
+				continue ;
+			}
+			else if (in_double_quote && (str[i + 1] == '$' || str[i + 1] == '\"' || str[i + 1] == '\\'))
+			{
+				i++;
+				if (str[i])
+					i++;
+				continue ;
+			}
+		}
+		if (str[i] == '\'' && !in_double_quote)
 			in_single_quote = !in_single_quote;
+		else if (str[i] == '\"' && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		if (str[i] == '$' && !in_single_quote && str[i + 1] == '\"' && !in_double_quote)
+		{
+			temp = ft_substr(str, start, i - start);
+			new_result = ft_strjoin(result, temp);
+			free(result);
+			free(temp);
+			result = new_result;
+			i++;
+			start = i;
+			continue ;
+		}
 		if (str[i] == '$' && !in_single_quote && str[i + 1]
 			&& str[i + 1] != ' ')
 		{

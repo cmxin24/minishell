@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 23:11:52 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/10 15:01:27 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <termios.h>
 # include <fcntl.h>
 # include "../lib/includes/libft.h"
+# include "../lib/includes/get_next_line.h" 
 
 extern int	g_signal;
 

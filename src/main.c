@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:10:41 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 16:36:49 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,22 @@ int	main(int argc, char **argv, char **envp)
 	env_list = ft_init_env(envp);
 	while (1)
 	{
-		line = readline("minishell$ ");
+		if (isatty(STDIN_FILENO))
+		{
+			line = readline("minishell$ ");
+		}
+		else
+		{
+			char *gnl_line = get_next_line(STDIN_FILENO);
+			if (gnl_line)
+			{
+				line = ft_strtrim(gnl_line, "\n");
+				free(gnl_line);
+			}
+			else
+				line = NULL;
+		}
+		//line = readline("minishell$ ");
 		if (!line)
 			break ;
 		if (*line)

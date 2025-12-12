@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:25:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:11:28 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 16:11:22 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	ft_builtin_redirect(t_cmd *cmd, int *saved_stdout, int *saved_stdin)
 			fd = open(redir->file, O_RDONLY);
 			if (fd == -1)
 			{
+				ft_putstr_fd("minishell: ", 2);
 				perror(redir->file);
 				return (-1);
 			}
@@ -43,6 +44,7 @@ int	ft_builtin_redirect(t_cmd *cmd, int *saved_stdout, int *saved_stdin)
 				fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (fd == -1)
 			{
+				ft_putstr_fd("minishell: ", 2);
 				perror(redir->file);
 				return (-1);
 			}

@@ -6,7 +6,7 @@
 #    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/08 21:28:51 by xin              ###   ########.fr        #
+#    Updated: 2025/12/10 14:58:17 by xin              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,9 @@ CFLAGS		= 	-Wall -Werror -Wextra $(RL_INC)
 
 LIBFT		=	libft.a
 LIB_DIR		=	lib/libft
+
+GET_NEXT_LINE	=	get_next_line.a
+GNL_DIR			=	lib/get_next_line
 
 SRCS 		:=	src/main.c			\
 				src/lexer.c			\
@@ -52,9 +55,9 @@ OBJ := $(SRCS:src/%.c=build/minishell/%.o)
 
 .PHONY: all build bonus clean fclean re
 
-all: $(LIB_DIR)/$(LIBFT) $(NAME)
+all: $(LIB_DIR)/$(LIBFT) $(GNL_DIR)/$(GET_NEXT_LINE) $(NAME) 
 
-$(NAME): $(OBJ) $(LIB_DIR)/$(LIBFT)
+$(NAME): $(OBJ) $(LIB_DIR)/$(LIBFT) $(GNL_DIR)/$(GET_NEXT_LINE)
 	cc $(CFLAGS) $(RL_LIB) $^ -o $@
 
 build/minishell/%.o: src/%.c
@@ -64,12 +67,17 @@ build/minishell/%.o: src/%.c
 $(LIB_DIR)/$(LIBFT):
 	make -C $(LIB_DIR)
 
+$(GNL_DIR)/$(GET_NEXT_LINE):
+	make -C $(GNL_DIR)
+
 clean: 
 	rm -rf build
 	make -C $(LIB_DIR) clean
+	make -C $(GNL_DIR) clean
 
 fclean: clean
 	rm -f $(NAME) $(CHECKER)
 	make -C $(LIB_DIR) fclean
+	make -C $(GNL_DIR) fclean
 
 re: fclean all

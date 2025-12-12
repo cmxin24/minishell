@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 23:42:45 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 16:28:29 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_exit(char **args, t_env *env)
 	int	exit_code;
 
 	exit_code = 0;
-	printf("exit\n");
+	//printf("exit\n");
 	if (args[1])
 	{
 		if (!ft_check_exit(args[1]))
@@ -45,7 +45,11 @@ int	ft_cd(char **args, t_env **env)
 {
 	char	*path;
 	char	cwd[1024];
+	int		print_path;
+	char	*alloc_path;
 
+	print_path = 0;
+	alloc_path = NULL;
 	if (args[1] == NULL)
 	{
 		path = ft_get_env_value(*env, "HOME");
@@ -55,14 +59,36 @@ int	ft_cd(char **args, t_env **env)
 			return (1);
 		}
 	}
+	else if (ft_strcmp(args[1], "-") == 0)
+	{
+		path = ft_get_env_value(*env, "OLDPWD");
+		if (path == NULL)
+		{
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+			return (1);
+		}
+		alloc_path = ft_strdup(path);
+		path = alloc_path;
+		print_path = 1;
+	}
 	else
 		path = args[1];
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		ft_set_env_value(env, "OLDPWD", cwd);
 	if (chdir(path) != 0)
-		return (perror("cd"), 1);
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		perror(path);
+		if (alloc_path)
+			free(alloc_path);
+		return (1);
+	}
+	if (print_path)
+		printf("%s\n", path);
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		ft_set_env_value(env, "PWD", cwd);
+	if (alloc_path)
+		free(alloc_path);
 	return (0);
 }
 

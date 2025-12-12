@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 23:26:00 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/12 16:11:24 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,12 @@ static void	ft_wait_for_children(pid_t last_pid)
 	while (1)
 	{
 		pid = waitpid(-1, &status, 0);
-		if (pid <= 0)
+		if (pid == -1)
+		{
+			if (errno == EINTR)
+				continue ;
 			break ;
+		}
 		if (pid == last_pid)
 		{
 			if (WIFEXITED(status))
@@ -101,6 +105,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 			fd = open(redir->file, O_RDONLY);
 			if (fd == -1)
 			{
+				ft_putstr_fd("minishell: ", 2);
 				perror(redir->file);
 				ft_free_array(env_array);
 				exit(1);
@@ -116,6 +121,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 				fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			if (fd == -1)
 			{
+				ft_putstr_fd("minishell: ", 2);
 				perror(redir->file);
 				ft_free_array(env_array);
 				exit(1);
