@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:04:08 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 19:30:25 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/16 12:50:12 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,6 @@ static int	if_quotes(char *str)
 		i++;
 	}
 	return (0);
-}
-
-static char	*strip_heredoc_quotes(char *str)
-{
-	int		len;
-	char	*new_str;
-
-	if (!if_quotes(str))
-		return (ft_strdup(str));
-	len = ft_len_without_quotes(str);
-	new_str = ft_strip_quotes(str, len);
-	return (new_str);
 }
 
 static void	ft_add_redir(t_cmd *cmd, t_redir *new)
@@ -78,7 +66,7 @@ void	ft_redirection(t_cmd *cmd, t_token **token)
 		new_redir->type = REDIR_HEREDOC;
 		if (if_quotes((*token)->content))
 			new_redir->heredoc_quoted = 1;
-		new_redir->file = strip_heredoc_quotes((*token)->content);
+		new_redir->file = ft_strdup((*token)->content);
 	}
 	else if (type == REDIRECT_IN)
 	{

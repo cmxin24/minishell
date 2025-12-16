@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:25:16 by xin               #+#    #+#             */
-/*   Updated: 2025/12/07 20:45:48 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/16 15:23:06 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ static int	handle_operator(char *line, int i, t_token **t)
 			add_token(t, create_token(ft_strdup(">>"), APPEND));
 			return (i + 2);
 		}
+		if (line[i + 1] == '|')
+		{
+			add_token(t, create_token(ft_strdup(">"), REDIRECT_OUT));
+			return (i + 2);
+		}
 		add_token(t, create_token(ft_strdup(">"), REDIRECT_OUT));
 		return (i + 1);
 	}
@@ -106,13 +111,16 @@ static int	handle_word(char *line, int i, t_token **list)
 t_token	*ft_lexer(char *line)
 {
 	t_token	*list;
+	t_token	*temp;
 	int		i;
+	char	*heredoc_line;
+	char	*trimmed;
 
 	list = NULL;
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == ' ' || line[i] == '\t')
+		if (line[i] == ' ' || line[i] == '\t' || line[i] == '\n')
 		{
 			i++;
 			continue ;
@@ -124,6 +132,43 @@ t_token	*ft_lexer(char *line)
 	}
 	if (!ft_check_token_syntax(list))
 	{
+		temp = list;
+		while (temp)
+		{
+			if (temp->type == HEREDOC && temp->next && temp->next->type == WORD)
+			{
+				while (1)
+				{
+					if (isatty(STDIN_FILENO))
+						heredoc_line = readline("> ");
+					else
+						heredoc_line = get_next_line(STDIN_FILENO);
+					if (!heredoc_line)
+						break ;
+					if (isatty(STDIN_FILENO)
+						&& ft_strcmp(heredoc_line, temp->next->content) == 0)
+					{
+						free(heredoc_line);
+						break ;
+					}
+					if (!isatty(STDIN_FILENO))
+					{
+						trimmed = ft_strtrim(heredoc_line, "\n");
+						if (ft_strcmp(trimmed, temp->next->content) == 0)
+						{
+							free(trimmed);
+							free(heredoc_line);
+							break ;
+						}
+						free(trimmed);
+						free(heredoc_line);
+					}
+					else
+						free(heredoc_line);
+				}
+			}
+			temp = temp->next;
+		}
 		ft_free_tokens(&list);
 		return (NULL);
 	}

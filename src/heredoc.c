@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 20:52:22 by xin               #+#    #+#             */
-/*   Updated: 2025/12/08 23:51:22 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/16 15:16:42 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,16 @@ static int	heredoc_input_loop(char *delimiter, int fd, t_env *env, int quotes)
 {
 	char	*line;
 	char	*expanded_line;
+	char	*trimmed;
 
 	while (1)
 	{
 		if (g_signal == 130)
-		{
-			free(line);
 			break ;
-		}
-		line = readline("> ");
+		if (isatty(STDIN_FILENO))
+			line = readline("> ");
+		else
+			line = get_next_line(STDIN_FILENO);
 		if (!line)
 		{
 			ft_putstr_fd("minishell: warning: here-document delimiter `", 2);
@@ -44,16 +45,31 @@ static int	heredoc_input_loop(char *delimiter, int fd, t_env *env, int quotes)
 			ft_putstr_fd("' not found\n", 2);
 			break ;
 		}
-		if (ft_strcmp(line, delimiter) == 0)
+		if (!isatty(STDIN_FILENO))
 		{
+			trimmed = ft_strtrim(line, "\n");
 			free(line);
-			break ;
+			line = trimmed;
 		}
 		if (quotes == 0)
 		{
 			expanded_line = expand_heredoc_line(line, env);
+			if (ft_strcmp(expanded_line, delimiter) == 0)
+			{
+				free(line);
+				free(expanded_line);
+				break ;
+			}
 			free(line);
 			line = expanded_line;
+		}
+		else
+		{
+			if (ft_strcmp(line, delimiter) == 0)
+			{
+				free(line);
+				break ;
+			}
 		}
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);

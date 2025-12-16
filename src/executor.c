@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 16:11:24 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/16 15:14:15 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,17 @@ char	*find_command_path(char *cmd, char **envp)
 	char	*temp;
 	int		i;
 
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	i = 0;
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
-		return (NULL);
-	paths = ft_split(envp[i] + 5, ':');
+		paths = ft_split("/usr/local/bin:/usr/bin:/bin", ':');
+	else
+		paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
 	{
@@ -78,6 +81,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 {
 	char		*path;
 	char		**env_array;
+	char		**temp_env;
 	int			fd;
 	int			exit_code;
 	struct stat	st;
@@ -85,6 +89,17 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	temp_env = ft_env_list_to_array(*envp);
+	if (cmd->content && cmd->content[0] && !is_builtin(cmd->content[0]))
+	{
+		path = find_command_path(cmd->content[0], temp_env);
+		if (path)
+		{
+			ft_set_env_value(envp, "_", path);
+			free(path);
+		}
+	}
+	ft_free_array(temp_env);
 	env_array = ft_env_list_to_array(*envp);
 	if (fd_in != 0)
 	{
@@ -136,6 +151,13 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 		ft_free_array(env_array);
 		exit(0);
 	}
+	if (ft_strcmp(cmd->content[0], ".") == 0)
+	{
+		ft_putstr_fd("minishell: .: filename argument required\n", 2);
+		ft_putstr_fd(".: usage: . filename [arguments]\n", 2);
+		ft_free_array(env_array);
+		exit(2);
+	}
 	if (is_builtin(cmd->content[0]))
 	{
 		exit_code = exec_builtin(cmd->content, envp);
@@ -146,7 +168,10 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	if (!path)
 	{
 		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd->content[0], 2);
+		if (cmd->content[0][0] == '\0')
+			ft_putstr_fd(":", 2);
+		else
+			ft_putstr_fd(cmd->content[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
@@ -180,7 +205,8 @@ void	ft_executor(t_cmd *cmd_list, t_env **env)
 	fd_in = 0;
 	if (ft_process_heredoc(cmd_list, *env) == -1)
 		return ;
-	if (!current->next && is_builtin(current->content[0]))
+	if (!current->next && current->content && current->content[0]
+		&& is_builtin(current->content[0]))
 	{
 		if (ft_builtin_redirect(current, &saved_stdout, &saved_stdin) == 0)
 		{

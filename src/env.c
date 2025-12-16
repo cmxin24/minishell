@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:33:29 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:15:39 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/16 15:28:37 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ t_env	*ft_init_env(char **env)
 	t_env	*current;
 	t_env	*new;
 	int		i;
+	char	*shlvl_value;
+	int		shlvl_num;
+	char	*new_shlvl;
 
 	list = NULL;
 	current = NULL;
@@ -57,6 +60,17 @@ t_env	*ft_init_env(char **env)
 		}
 		i++;
 	}
+	shlvl_value = ft_get_env_value(list, "SHLVL");
+	if (shlvl_value)
+	{
+		shlvl_num = ft_atoi(shlvl_value);
+		shlvl_num++;
+		new_shlvl = ft_itoa(shlvl_num);
+		ft_set_env_value(&list, "SHLVL", new_shlvl);
+		free(new_shlvl);
+	}
+	else
+		ft_set_env_value(&list, "SHLVL", "1");
 	return (list);
 }
 

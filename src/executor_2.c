@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:25:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 16:11:22 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/16 13:11:52 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	ft_process_heredoc(t_cmd *cmd, t_env *env)
 {
 	t_cmd	*current;
 	t_redir	*redir;
+	char	*expanded_delim;
+	char	*stripped_delim;
 
 	current = cmd;
 	while (current)
@@ -85,6 +87,18 @@ int	ft_process_heredoc(t_cmd *cmd, t_env *env)
 		{
 			if (redir->type == REDIR_HEREDOC)
 			{
+				if (redir->heredoc_quoted == 0)
+				{
+					expanded_delim = expand_token_str(redir->file, &env);
+					stripped_delim = ft_strip_quotes(expanded_delim, 0);
+					free(expanded_delim);
+				}
+				else
+				{
+					stripped_delim = ft_strip_quotes(redir->file, 0);
+				}
+				free(redir->file);
+				redir->file = stripped_delim;
 				if (ft_heredoc(redir, env) == -1)
 				{
 					perror("heredoc");

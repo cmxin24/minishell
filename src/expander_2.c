@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:44:00 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 16:37:35 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/16 15:14:43 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ char	*expand_token_str(char *str, t_env **env)
 					i++;
 				continue ;
 			}
-			else if (in_double_quote && (str[i + 1] == '$' || str[i + 1] == '\"' || str[i + 1] == '\\'))
+			else if (in_double_quote && (str[i + 1] == '$' || str[i + 1] == '\"'
+					|| str[i + 1] == '\\'))
 			{
 				i++;
 				if (str[i])
@@ -78,7 +79,8 @@ char	*expand_token_str(char *str, t_env **env)
 			in_single_quote = !in_single_quote;
 		else if (str[i] == '\"' && !in_single_quote)
 			in_double_quote = !in_double_quote;
-		if (str[i] == '$' && !in_single_quote && str[i + 1] == '\"' && !in_double_quote)
+		if (str[i] == '$' && !in_single_quote && str[i + 1] == '\"'
+			&& !in_double_quote)
 		{
 			temp = ft_substr(str, start, i - start);
 			new_result = ft_strjoin(result, temp);
@@ -90,7 +92,7 @@ char	*expand_token_str(char *str, t_env **env)
 			continue ;
 		}
 		if (str[i] == '$' && !in_single_quote && str[i + 1]
-			&& str[i + 1] != ' ')
+			&& str[i + 1] != ' ' && !(in_double_quote && str[i + 1] == '\"'))
 		{
 			temp = ft_substr(str, start, i - start);
 			new_result = ft_strjoin(result, temp);
@@ -99,8 +101,16 @@ char	*expand_token_str(char *str, t_env **env)
 			result = new_result;
 			i++;
 			var_len = get_var_len(&str[i]);
-			if (var_len == 0)
-				var_value = ft_strdup("$");
+			if (var_len == 0 && (str[i] == '\'' || str[i] == '"'))
+			{
+				var_value = ft_strdup("");
+				var_len = 0;
+			}
+			else if (var_len == 0)
+			{
+				var_value = ft_substr(str, i - 1, 2);
+				var_len = 1;
+			}
 			else if (var_len == 1 && str[i] == '?')
 				var_value = ft_itoa(g_signal);
 			else
