@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 20:26:10 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/16 21:43:10 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static void	ft_wait_for_children(pid_t last_pid)
 {
-	int				status;
-	pid_t			pid;
+	int					status;
+	pid_t				pid;
 	struct sigaction	sa;
 
 	sigemptyset(&sa.sa_mask);

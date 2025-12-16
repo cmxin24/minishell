@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 20:24:21 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/16 21:43:02 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ static int	has_unclosed_quote(char *str)
 	return (quote != 0);
 }
 
-// static void	ft_handle_3000_tester(char *line)
+// static char	*ft_handle_3000_tester(void)
 // {
+// 	char	*line;
 // 	char	*continuation;
 // 	char	*temp;
 // 	char	*gnl_line;
@@ -65,6 +66,7 @@ static int	has_unclosed_quote(char *str)
 // 		else
 // 			line = NULL;
 // 	}
+// 	return (line);
 // }
 
 static void	ft_process_line(char *line, t_env **env_list)
@@ -127,10 +129,11 @@ int	main(int argc, char **argv, char **envp)
 	env_list = ft_init_env(envp);
 	while (1)
 	{
+		//line = ft_handle_3000_tester();
 		line = readline("minishell$ ");
 		if (!line)
 			break ;
-		if (*line)
+		if (*line && isatty(STDIN_FILENO))
 			add_history(line);
 		ft_main_steam(line, lines, &env_list);
 		free(line);
