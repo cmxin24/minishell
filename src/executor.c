@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 15:14:15 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/16 18:07:09 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 static void	ft_wait_for_children(pid_t last_pid)
 {
-	int		status;
-	pid_t	pid;
+	int				status;
+	pid_t			pid;
+	struct sigaction	sa;
 
-	signal(SIGINT, SIG_IGN);
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = SIG_IGN;
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
 	while (1)
 	{
 		pid = waitpid(-1, &status, 0);
@@ -87,8 +91,13 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	struct stat	st;
 	t_redir		*redir;
 
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = SIG_DFL;
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 	temp_env = ft_env_list_to_array(*envp);
 	if (cmd->content && cmd->content[0] && !is_builtin(cmd->content[0]))
 	{
