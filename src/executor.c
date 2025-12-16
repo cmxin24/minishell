@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 18:07:09 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/16 20:26:10 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,13 @@ char	*find_command_path(char *cmd, char **envp)
 
 void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 {
-	char		*path;
-	char		**env_array;
-	char		**temp_env;
-	int			fd;
-	int			exit_code;
-	struct stat	st;
-	t_redir		*redir;
-
+	char				*path;
+	char				**env_array;
+	char				**temp_env;
+	int					fd;
+	int					exit_code;
+	struct stat			st;
+	t_redir				*redir;
 	struct sigaction	sa;
 
 	sigemptyset(&sa.sa_mask);
@@ -188,7 +187,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->content[0], 2);
-		ft_putstr_fd(": is a directory\n", 2);
+		ft_putstr_fd(": Is a directory\n", 2);
 		exit(126);
 	}
 	execve(path, cmd->content, env_array);

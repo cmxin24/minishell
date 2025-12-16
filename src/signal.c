@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:45:58 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 18:11:20 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/16 20:18:43 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ void	ft_handle_sigint(int signum)
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
-
-// Handle with signal ctrl + c and ctrl + \	
 
 void	ft_init_signals(void)
 {
