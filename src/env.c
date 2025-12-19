@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:33:29 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 15:28:37 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 18:09:39 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,31 @@ static t_env	*ft_new_env_node(char *str)
 	return (new_node);
 }
 
+static void	ft_set_shlvl(t_env	*list)
+{
+	char	*shlvl_value;
+	int		shlvl_num;
+	char	*new_shlvl;
+
+	shlvl_value = ft_get_env_value(list, "SHLVL");
+	if (shlvl_value)
+	{
+		shlvl_num = ft_atoi(shlvl_value);
+		shlvl_num++;
+		new_shlvl = ft_itoa(shlvl_num);
+		ft_set_env_value(&list, "SHLVL", new_shlvl);
+		free(new_shlvl);
+	}
+	else
+		ft_set_env_value(&list, "SHLVL", "1");
+}
+
 t_env	*ft_init_env(char **env)
 {
 	t_env	*list;
 	t_env	*current;
 	t_env	*new;
 	int		i;
-	char	*shlvl_value;
-	int		shlvl_num;
-	char	*new_shlvl;
 
 	list = NULL;
 	current = NULL;
@@ -60,26 +76,15 @@ t_env	*ft_init_env(char **env)
 		}
 		i++;
 	}
-	shlvl_value = ft_get_env_value(list, "SHLVL");
-	if (shlvl_value)
-	{
-		shlvl_num = ft_atoi(shlvl_value);
-		shlvl_num++;
-		new_shlvl = ft_itoa(shlvl_num);
-		ft_set_env_value(&list, "SHLVL", new_shlvl);
-		free(new_shlvl);
-	}
-	else
-		ft_set_env_value(&list, "SHLVL", "1");
+	ft_set_shlvl(list);
 	return (list);
 }
 
-char	**ft_env_list_to_array(t_env *env)
+char	**ft_env_list_to_array(t_env *env, int i)
 {
-	char	**arr;
+	char	**array;
 	t_env	*temp;
 	int		count;
-	int		i;
 	char	*temp_str;
 
 	count = 0;
@@ -89,20 +94,19 @@ char	**ft_env_list_to_array(t_env *env)
 		count++;
 		temp = temp->next;
 	}
-	arr = malloc(sizeof(char *) * (count + 1));
-	if (!arr)
+	array = malloc(sizeof(char *) * (count + 1));
+	if (!array)
 		return (NULL);
 	temp = env;
-	i = 0;
 	while (temp)
 	{
 		temp_str = ft_strjoin(temp->key, "=");
-		arr[i] = ft_strjoin(temp_str, temp->value);
+		array[i] = ft_strjoin(temp_str, temp->value);
 		free(temp_str);
 		temp = temp->next;
 		i++;
 	}
-	return (arr[i] = NULL, arr);
+	return (array[i] = NULL, array);
 }
 
 char	*ft_get_env_value(t_env *env, char *key)

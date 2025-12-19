@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:45:58 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 15:34:59 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 17:04:58 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ void	ft_disable_echo_ctl(void)
 		return ;
 }
 
+/**
+ * @brief when shell meets the signal ctrl c, clean the line and set exit code
+ * @note
+ * rl_one_new_line() set where the input cursor should be
+ * the second parameter 0 of rl_replace_line means do not save to history
+ */
 void	ft_handle_sigint(int signum)
 {
 	(void)signum;
@@ -41,6 +47,11 @@ void	ft_handle_sigint(int signum)
 	rl_redisplay();
 }
 
+/**
+ * @brief set the different reactions when user input a signal
+ * @param sa_int	ctrl c means interrupt
+ * @param sa_quit	ctrl \ means quit 
+ */
 void	ft_init_signals(void)
 {
 	struct sigaction	sa_int;

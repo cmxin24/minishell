@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 15:54:46 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 18:05:24 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ char	*ft_get_env_value(t_env *env_list, char *key);
 void	ft_set_env_value(t_env **env_list, char *key, char *value);
 void	ft_append_env_value(t_env **env, char *key, char *value);
 void	ft_unset_env(t_env **env, char *key);
-char	**ft_env_list_to_array(t_env *env_list);
+char	**ft_env_list_to_array(t_env *env_list, int i);
 
 // built-in functions
 int		ft_pwd(void);

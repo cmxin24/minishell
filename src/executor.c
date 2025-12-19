@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:17:34 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 18:04:17 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	sigaction(SIGPIPE, &sa, NULL);
 	sigemptyset(&set);
 	sigprocmask(SIG_SETMASK, &set, NULL);
-	temp_env = ft_env_list_to_array(*envp);
+	temp_env = ft_env_list_to_array(*envp, 0);
 	if (cmd->content && cmd->content[0] && !is_builtin(cmd->content[0]))
 	{
 		path = find_command_path(cmd->content[0], temp_env);
@@ -112,7 +112,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 		}
 	}
 	ft_free_array(temp_env);
-	env_array = ft_env_list_to_array(*envp);
+	env_array = ft_env_list_to_array(*envp, 0);
 	if (fd_in != 0)
 	{
 		dup2(fd_in, STDIN_FILENO);
