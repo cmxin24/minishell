@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:45:58 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 20:18:43 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 15:32:58 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 int	g_signal = 0;
 
+/**
+ * @brief disable the print of ctrl c  ctrl d and ctrl \ 
+ * @note
+ * ECHOCTL is a local flag of termios
+ * TCSANOW means set the change now
+ */
 void	ft_disable_echo_ctl(void)
 {
 	struct termios	term;

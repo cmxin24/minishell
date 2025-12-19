@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:20:51 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 14:58:06 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_exit(char **args, t_env *env)
 	int	exit_code;
 
 	exit_code = 0;
-	//printf("exit\n");
+	printf("exit\n");
 	if (args[1])
 	{
 		if (!ft_check_exit(args[1]))

@@ -6,13 +6,13 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:21:44 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 15:13:34 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	has_unclosed_quote(char *str)
+int	has_unclosed_quote(char *str)
 {
 	int		i;
 	char	quote;
@@ -28,45 +28,6 @@ static int	has_unclosed_quote(char *str)
 		i++;
 	}
 	return (quote != 0);
-}
-
-static char	*ft_handle_3000_tester(void)
-{
-	char	*line;
-	char	*continuation;
-	char	*temp;
-	char	*gnl_line;
-
-	if (isatty(STDIN_FILENO))
-	{
-		line = readline("minishell$ ");
-		if (line && has_unclosed_quote(line))
-		{
-			while (has_unclosed_quote(line))
-			{
-				continuation = readline("> ");
-				if (!continuation)
-					break ;
-				temp = ft_strjoin(line, "\n");
-				free(line);
-				line = ft_strjoin(temp, continuation);
-				free(temp);
-				free(continuation);
-			}
-		}
-	}
-	else
-	{
-		gnl_line = get_next_line(STDIN_FILENO);
-		if (gnl_line)
-		{
-			line = ft_strtrim(gnl_line, "\n");
-			free(gnl_line);
-		}
-		else
-			line = NULL;
-	}
-	return (line);
 }
 
 static void	ft_process_line(char *line, t_env **env_list)
@@ -129,8 +90,8 @@ int	main(int argc, char **argv, char **envp)
 	env_list = ft_init_env(envp);
 	while (1)
 	{
-		line = ft_handle_3000_tester();
-		//line = readline("minishell$ ");
+		//line = ft_handle_3000_tester();
+		line = readline("minishell$ ");
 		if (!line)
 			break ;
 		if (*line && isatty(STDIN_FILENO))
