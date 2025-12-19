@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:15:56 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 15:54:46 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ typedef enum e_type_of_token
 
 typedef struct s_token
 {
-	char			*content;
-	t_type_of_token	type;
-	struct s_token	*next;
+	char				*content;
+	t_type_of_token		type;
+	struct s_token		*next;
 }	t_token;
 
 typedef enum e_redir_type
@@ -60,41 +60,46 @@ typedef enum e_redir_type
 
 typedef struct s_redir
 {
-	char			*file;
-	t_redir_type	type;
-	int				heredoc_quoted;
-	struct s_redir	*next;
+	char				*file;
+	t_redir_type		type;
+	int					heredoc_quoted;
+	struct s_redir		*next;
 }	t_redir;
 
-typedef struct s_ast	t_ast;
-
-typedef struct s_cmd
+typedef enum e_ast_type
 {
-	char			**content;
-	t_redir			*redirs;
-	struct s_cmd	*next;
-	t_ast			*subshell;
-}	t_cmd;
-
-typedef enum e_ast_type {
 	AST_PIPELINE,
 	AST_AND,
 	AST_OR
 }	t_ast_type;
 
-struct s_ast {
-	t_ast_type		type;
-	t_cmd			*pipeline;
-	struct s_ast	*left;
-	struct s_ast	*right;
-};
+struct		s_ast;
+
+typedef struct s_cmd
+{
+	char				**content;
+	t_redir				*redirs;
+	struct s_cmd		*next;
+	struct s_ast		*subshell;
+}	t_cmd;
+
+typedef struct s_ast
+{
+	t_ast_type			type;
+	t_cmd				*pipeline;
+	struct s_ast		*left;
+	struct s_ast		*right;
+}	t_ast;
 
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
+	char				*key;
+	char				*value;
+	struct s_env		*next;
 }	t_env;
+
+// main stream functions
+int		has_unclosed_quote(char *str);
 
 // heredoc functions
 int		ft_heredoc(t_redir *redir, t_env *env);

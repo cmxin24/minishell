@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:25:16 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 16:00:36 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,17 @@ static int	ft_check_token_syntax(t_token *tokens)
 
 	temp = tokens;
 	parens = 0;
-	if (temp && (temp->type == PIPE || temp->type == AND || temp->type == OR || temp->type == R_PAREN))
+	if (temp && (temp->type == PIPE || temp->type == AND || temp->type == OR
+			|| temp->type == R_PAREN))
 		return (syntax_error(temp->content));
 	while (temp)
 	{
 		if (temp->type == L_PAREN)
 		{
 			parens++;
-			if (temp->next && (temp->next->type == PIPE || temp->next->type == AND || temp->next->type == OR || temp->next->type == R_PAREN))
+			if (temp->next && (temp->next->type == PIPE
+					|| temp->next->type == AND || temp->next->type == OR
+					|| temp->next->type == R_PAREN))
 				return (syntax_error(temp->next->content));
 			if (temp->next == NULL)
 				return (syntax_error("newline"));
@@ -45,19 +48,23 @@ static int	ft_check_token_syntax(t_token *tokens)
 			parens--;
 			if (parens < 0)
 				return (syntax_error(")"));
-			if (temp->next && (temp->next->type == WORD || temp->next->type == L_PAREN))
+			if (temp->next && (temp->next->type == WORD
+					|| temp->next->type == L_PAREN))
 				return (syntax_error(temp->next->content));
 		}
 		else if (temp->type == PIPE || temp->type == AND || temp->type == OR)
 		{
-			if (temp->next == NULL || temp->next->type == PIPE || temp->next->type == AND || temp->next->type == OR || temp->next->type == R_PAREN)
+			if (temp->next == NULL || temp->next->type == PIPE
+				|| temp->next->type == AND || temp->next->type == OR
+				|| temp->next->type == R_PAREN)
 			{
 				if (temp->next == NULL)
 					return (syntax_error("newline"));
 				return (syntax_error(temp->next->content));
 			}
 		}
-		else if (temp->type == REDIRECT_IN || temp->type == REDIRECT_OUT || temp->type == APPEND || temp->type == HEREDOC)
+		else if (temp->type == REDIRECT_IN || temp->type == REDIRECT_OUT
+			|| temp->type == APPEND || temp->type == HEREDOC)
 		{
 			if (temp->next == NULL || temp->next->type != WORD)
 			{
@@ -170,7 +177,8 @@ t_token	*ft_lexer(char *line)
 			i++;
 			continue ;
 		}
-		if (line[i] == '|' || line[i] == '<' || line[i] == '>' || line[i] == '&' || line[i] == '(' || line[i] == ')')
+		if (line[i] == '|' || line[i] == '<' || line[i] == '>'
+			|| line[i] == '&' || line[i] == '(' || line[i] == ')')
 			i = handle_operator(line, i, &list);
 		else
 			i = handle_word(line, i, &list);

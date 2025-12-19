@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 15:13:34 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 16:01:28 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	ft_process_line(char *line, t_env **env_list)
 	if (!token_list)
 		return ;
 	ast = ft_parser(token_list);
-	//ft_expander(ast, env_list);
 	if (ast && ft_process_heredoc(ast, *env_list) == 0)
 		ft_executor(ast, env_list);
 	ft_free_tokens(&token_list);
@@ -64,7 +63,7 @@ static void	ft_process_lines(char **lines, t_env **env_list)
 	ft_free_array(lines);
 }
 
-static void	ft_main_steam(char *line, char **lines, t_env **env_list)
+static void	ft_main_stream(char *line, char **lines, t_env **env_list)
 {
 	if (ft_strchr(line, '\n') && !has_unclosed_quote(line))
 	{
@@ -90,13 +89,12 @@ int	main(int argc, char **argv, char **envp)
 	env_list = ft_init_env(envp);
 	while (1)
 	{
-		//line = ft_handle_3000_tester();
 		line = readline("minishell$ ");
 		if (!line)
 			break ;
 		if (*line && isatty(STDIN_FILENO))
 			add_history(line);
-		ft_main_steam(line, lines, &env_list);
+		ft_main_stream(line, lines, &env_list);
 		free(line);
 	}
 	ft_free_env_list(env_list);

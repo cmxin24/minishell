@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 10:00:00 by copilot           #+#    #+#             */
-/*   Updated: 2025/12/19 15:33:34 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 16:08:02 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 static int	match(char *pattern, char *string)
 {
+	char	quote;
+
 	while (*pattern && *string)
 	{
 		if (*pattern == '*')
@@ -33,7 +35,7 @@ static int	match(char *pattern, char *string)
 		}
 		if (*pattern == '\'' || *pattern == '\"')
 		{
-			char quote = *pattern++;
+			quote = *pattern++;
 			while (*pattern && *pattern != quote)
 			{
 				if (*pattern != *string)
@@ -41,7 +43,8 @@ static int	match(char *pattern, char *string)
 				pattern++;
 				string++;
 			}
-			if (*pattern) pattern++;
+			if (*pattern)
+				pattern++;
 		}
 		else
 		{
@@ -59,7 +62,7 @@ static int	match(char *pattern, char *string)
 
 static int	pattern_starts_with_dot(char *pattern)
 {
-	int	i;
+	int		i;
 	char	quote;
 
 	i = 0;
@@ -114,14 +117,17 @@ static int	count_matches(char *pattern)
 	if (!dir)
 		return (0);
 	count = 0;
-	while ((entry = readdir(dir)) != NULL)
+	entry = readdir(dir);
+	while (entry != NULL)
 	{
-		if (ft_strcmp(entry->d_name, ".") == 0 || ft_strcmp(entry->d_name, "..") == 0)
+		if (ft_strcmp(entry->d_name, ".") == 0
+			|| ft_strcmp(entry->d_name, "..") == 0)
 			continue ;
 		if (entry->d_name[0] == '.' && !pattern_starts_with_dot(pattern))
 			continue ;
 		if (match(pattern, entry->d_name))
 			count++;
+		entry = readdir(dir);
 	}
 	closedir(dir);
 	return (count);
@@ -137,14 +143,17 @@ static void	fill_matches(char *pattern, char **matches)
 	if (!dir)
 		return ;
 	i = 0;
-	while ((entry = readdir(dir)) != NULL)
+	entry = readdir(dir);
+	while (entry != NULL)
 	{
-		if (ft_strcmp(entry->d_name, ".") == 0 || ft_strcmp(entry->d_name, "..") == 0)
+		if (ft_strcmp(entry->d_name, ".") == 0
+			|| ft_strcmp(entry->d_name, "..") == 0)
 			continue ;
 		if (entry->d_name[0] == '.' && !pattern_starts_with_dot(pattern))
 			continue ;
 		if (match(pattern, entry->d_name))
 			matches[i++] = ft_strdup(entry->d_name);
+		entry = readdir(dir);
 	}
 	matches[i] = NULL;
 	closedir(dir);

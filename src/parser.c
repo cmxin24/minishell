@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:21:20 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 16:03:08 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static int	ft_count_args(t_token *token)
 	int	i;
 
 	i = 0;
-	while (token && token->type != PIPE && token->type != AND && token->type != OR && token->type != R_PAREN)
+	while (token && token->type != PIPE && token->type
+		!= AND && token->type != OR && token->type != R_PAREN)
 	{
 		if (token->type == REDIRECT_IN || token->type == REDIRECT_OUT
 			|| token->type == APPEND || token->type == HEREDOC)
@@ -61,7 +62,8 @@ static t_cmd	*parse_subshell(t_token **tokens)
 		*tokens = (*tokens)->next;
 	else
 		ft_putstr_fd("minishell: syntax error: expected ')'\n", 2);
-	while (*tokens && ((*tokens)->type == REDIRECT_IN || (*tokens)->type == REDIRECT_OUT
+	while (*tokens && ((*tokens)->type == REDIRECT_IN
+			|| (*tokens)->type == REDIRECT_OUT
 			|| (*tokens)->type == APPEND || (*tokens)->type == HEREDOC))
 	{
 		ft_redirection(cmd, tokens);
@@ -87,7 +89,8 @@ static t_cmd	*parse_single_command(t_token **temp)
 	if (!cmd->content)
 		return (NULL);
 	i = 0;
-	while (*temp && (*temp)->type != PIPE && (*temp)->type != AND && (*temp)->type != OR && (*temp)->type != R_PAREN)
+	while (*temp && (*temp)->type != PIPE && (*temp)->type != AND
+		&& (*temp)->type != OR && (*temp)->type != R_PAREN)
 	{
 		if ((*temp)->type == WORD)
 			cmd->content[i++] = ft_strdup((*temp)->content);
@@ -123,12 +126,14 @@ t_cmd	*ft_parse_pipeline(t_token **tokens)
 
 	list = NULL;
 	current = NULL;
-	while (*tokens && (*tokens)->type != AND && (*tokens)->type != OR && (*tokens)->type != R_PAREN)
+	while (*tokens && (*tokens)->type != AND && (*tokens)->type != OR
+		&& (*tokens)->type != R_PAREN)
 	{
 		if ((*tokens)->type == PIPE)
 		{
 			*tokens = (*tokens)->next;
-			if (!*tokens || (*tokens)->type == PIPE || (*tokens)->type == AND || (*tokens)->type == OR || (*tokens)->type == R_PAREN)
+			if (!*tokens || (*tokens)->type == PIPE || (*tokens)->type == AND
+				|| (*tokens)->type == OR || (*tokens)->type == R_PAREN)
 				break ;
 			continue ;
 		}
