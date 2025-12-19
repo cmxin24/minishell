@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:47:12 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 13:05:07 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,16 +119,56 @@ static void	remove_empty_arg(t_cmd *cmd, int index)
 	cmd->content[i] = NULL;
 }
 
-void	ft_expander(t_cmd *cmd_list, t_env **env)
+static void	insert_wildcards(t_cmd *cmd, int *i, char **matches)
+{
+	int		old_len;
+	int		match_len;
+	char	**new_content;
+	int		j;
+	int		k;
+
+	old_len = 0;
+	while (cmd->content[old_len])
+		old_len++;
+	match_len = 0;
+	while (matches[match_len])
+		match_len++;
+	new_content = malloc(sizeof(char *) * (old_len + match_len));
+	if (!new_content)
+		return ;
+	j = 0;
+	k = 0;
+	while (k < *i)
+		new_content[j++] = cmd->content[k++];
+	k = 0;
+	while (k < match_len)
+		new_content[j++] = matches[k++];
+	k = *i + 1;
+	while (k < old_len)
+		new_content[j++] = cmd->content[k++];
+	new_content[j] = NULL;
+	free(cmd->content[*i]);
+	free(cmd->content);
+	free(matches);
+	cmd->content = new_content;
+	*i += match_len;
+}
+
+void	ft_expander(t_ast *ast, t_env **env);
+
+static void	expand_pipeline(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 	int		i;
 	char	*old_str;
 	t_redir	*redir;
+	char	**matches;
 
 	cmd = cmd_list;
 	while (cmd)
 	{
+		if (cmd->subshell)
+			ft_expander(cmd->subshell, env);
 		if (cmd->content)
 		{
 			i = 0;
@@ -140,6 +180,12 @@ void	ft_expander(t_cmd *cmd_list, t_env **env)
 				if (cmd->content[i][0] == '\0')
 				{
 					remove_empty_arg(cmd, i);
+					continue ;
+				}
+				matches = expand_wildcard(cmd->content[i]);
+				if (matches)
+				{
+					insert_wildcards(cmd, &i, matches);
 					continue ;
 				}
 				old_str = ft_strip_quotes(cmd->content[i], 0);
@@ -163,5 +209,18 @@ void	ft_expander(t_cmd *cmd_list, t_env **env)
 			redir = redir->next;
 		}
 		cmd = cmd->next;
+	}
+}
+
+void	ft_expander(t_ast *ast, t_env **env)
+{
+	if (!ast)
+		return ;
+	if (ast->type == AST_PIPELINE)
+		expand_pipeline(ast->pipeline, env);
+	else
+	{
+		ft_expander(ast->left, env);
+		ft_expander(ast->right, env);
 	}
 }

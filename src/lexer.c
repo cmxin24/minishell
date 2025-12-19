@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:25:16 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 15:23:06 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,21 @@ static int	ft_check_token_syntax(t_token *tokens)
 static int	handle_operator(char *line, int i, t_token **t)
 {
 	if (line[i] == '|')
+	{
+		if (line[i + 1] == '|')
+			return (add_token(t, create_token(ft_strdup("||"), OR)), i + 2);
 		return (add_token(t, create_token(ft_strdup("|"), PIPE)), i + 1);
+	}
+	else if (line[i] == '&')
+	{
+		if (line[i + 1] == '&')
+			return (add_token(t, create_token(ft_strdup("&&"), AND)), i + 2);
+		return (add_token(t, create_token(ft_strdup("&"), WORD)), i + 1);
+	}
+	else if (line[i] == '(')
+		return (add_token(t, create_token(ft_strdup("("), L_PAREN)), i + 1);
+	else if (line[i] == ')')
+		return (add_token(t, create_token(ft_strdup(")"), R_PAREN)), i + 1);
 	else if (line[i] == '<')
 	{
 		if (line[i + 1] == '<')
@@ -125,7 +139,7 @@ t_token	*ft_lexer(char *line)
 			i++;
 			continue ;
 		}
-		if (line[i] == '|' || line[i] == '<' || line[i] == '>')
+		if (line[i] == '|' || line[i] == '<' || line[i] == '>' || line[i] == '&' || line[i] == '(' || line[i] == ')')
 			i = handle_operator(line, i, &list);
 		else
 			i = handle_word(line, i, &list);

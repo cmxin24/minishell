@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+         #
+#    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/12 17:10:24 by meyu             ###   ########.fr        #
+#    Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,8 @@ SRCS 		:=	src/main.c			\
 				src/signal.c		\
 				src/heredoc.c		\
 				src/heredoc_2.c		\
-				src/free.c
+				src/free.c			\
+				src/wildcard.c
 
 OBJ := $(SRCS:src/%.c=build/minishell/%.o)
 

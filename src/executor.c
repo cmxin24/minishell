@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 21:43:10 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 12:17:34 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,12 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 		}
 		redir = redir->next;
 	}
+	if (cmd->subshell)
+	{
+		ft_executor(cmd->subshell, envp);
+		ft_free_array(env_array);
+		exit(g_signal);
+	}
 	if (cmd->content == NULL || cmd->content[0] == NULL)
 	{
 		ft_free_array(env_array);
@@ -187,7 +193,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd->content[0], 2);
-		ft_putstr_fd(": Is a directory\n", 2);
+		ft_putstr_fd(": is a directory\n", 2);
 		exit(126);
 	}
 	execve(path, cmd->content, env_array);
@@ -200,7 +206,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	exit(1);
 }
 
-void	ft_executor(t_cmd *cmd_list, t_env **env)
+static void	execute_pipeline(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*current;
 	int		pipe_fd[2];
@@ -211,8 +217,6 @@ void	ft_executor(t_cmd *cmd_list, t_env **env)
 
 	current = cmd_list;
 	fd_in = 0;
-	if (ft_process_heredoc(cmd_list, *env) == -1)
-		return ;
 	if (!current->next && current->content && current->content[0]
 		&& is_builtin(current->content[0]))
 	{
@@ -258,4 +262,24 @@ void	ft_executor(t_cmd *cmd_list, t_env **env)
 		current = current->next;
 	}
 	ft_wait_for_children(pid);
+}
+
+void	ft_executor(t_ast *ast, t_env **env)
+{
+	if (!ast)
+		return ;
+	if (ast->type == AST_PIPELINE)
+		execute_pipeline(ast->pipeline, env);
+	else if (ast->type == AST_AND)
+	{
+		ft_executor(ast->left, env);
+		if (g_signal == 0)
+			ft_executor(ast->right, env);
+	}
+	else if (ast->type == AST_OR)
+	{
+		ft_executor(ast->left, env);
+		if (g_signal != 0)
+			ft_executor(ast->right, env);
+	}
 }

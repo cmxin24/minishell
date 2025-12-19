@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:25:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 13:11:52 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ void	ft_restore_io(int saved_stdout, int saved_stdin)
 	}
 }
 
-int	ft_process_heredoc(t_cmd *cmd, t_env *env)
+int	ft_process_heredoc(t_ast *ast, t_env *env);
+
+static int	process_heredoc_pipeline(t_cmd *cmd, t_env *env)
 {
 	t_cmd	*current;
 	t_redir	*redir;
@@ -82,6 +84,11 @@ int	ft_process_heredoc(t_cmd *cmd, t_env *env)
 	current = cmd;
 	while (current)
 	{
+		if (current->subshell)
+		{
+			if (ft_process_heredoc(current->subshell, env) == -1)
+				return (-1);
+		}
 		redir = current->redirs;
 		while (redir)
 		{
@@ -108,6 +115,22 @@ int	ft_process_heredoc(t_cmd *cmd, t_env *env)
 			redir = redir->next;
 		}
 		current = current->next;
+	}
+	return (0);
+}
+
+int	ft_process_heredoc(t_ast *ast, t_env *env)
+{
+	if (!ast)
+		return (0);
+	if (ast->type == AST_PIPELINE)
+		return (process_heredoc_pipeline(ast->pipeline, env));
+	else
+	{
+		if (ft_process_heredoc(ast->left, env) == -1)
+			return (-1);
+		if (ft_process_heredoc(ast->right, env) == -1)
+			return (-1);
 	}
 	return (0);
 }

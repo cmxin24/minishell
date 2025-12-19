@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 19:42:07 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 12:15:56 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ typedef enum e_type_of_token
 	REDIRECT_OUT,
 	APPEND,
 	HEREDOC,
+	AND,
+	OR,
+	L_PAREN,
+	R_PAREN,
 }	t_type_of_token;
 
 typedef struct s_token
@@ -62,12 +66,28 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
+typedef struct s_ast	t_ast;
+
 typedef struct s_cmd
 {
 	char			**content;
 	t_redir			*redirs;
 	struct s_cmd	*next;
+	t_ast			*subshell;
 }	t_cmd;
+
+typedef enum e_ast_type {
+	AST_PIPELINE,
+	AST_AND,
+	AST_OR
+}	t_ast_type;
+
+struct s_ast {
+	t_ast_type		type;
+	t_cmd			*pipeline;
+	struct s_ast	*left;
+	struct s_ast	*right;
+};
 
 typedef struct s_env
 {
@@ -88,6 +108,8 @@ void	ft_handle_sigint(int sig);
 // environment functions
 t_env	*ft_init_env(char **envp);
 void	ft_free_env_list(t_env *env_list);
+void	ft_free_cmd_list(t_cmd *cmd);
+void	ft_free_ast(t_ast *ast);
 char	*ft_get_env_value(t_env *env_list, char *key);
 void	ft_set_env_value(t_env **env_list, char *key, char *value);
 void	ft_append_env_value(t_env **env, char *key, char *value);
@@ -98,6 +120,9 @@ char	**ft_env_list_to_array(t_env *env_list);
 int		ft_pwd(void);
 int		ft_env(t_env *env, char **args);
 int		ft_cd(char **args, t_env **env);
+
+// wildcard functions
+char	**expand_wildcard(char *pattern);
 int		ft_exit(char **args, t_env *env);
 int		echo_n_flag(char *str);
 int		ft_echo(char **args);
@@ -110,21 +135,20 @@ void	ft_indentifier_error(char *cmd, char *arg);
 int		ft_check_exit(char *str);
 
 // parser functions
-t_cmd	*ft_parser(t_token *tokens);
-void	ft_free_cmd_list(t_cmd *cmd);
+t_ast	*ft_parser(t_token *tokens);
 void	ft_redirection(t_cmd *cmd, t_token **token);
 
 // executor functions
-void	ft_executor(t_cmd *cmd_list, t_env **env);
+void	ft_executor(t_ast *ast, t_env **env);
 int		ft_builtin_redirect(t_cmd *cmd, int *saved_stdout, int *saved_stdin);
 void	ft_restore_io(int saved_stdout, int saved_stdin);
-int		ft_process_heredoc(t_cmd *cmd, t_env *env);
+int		ft_process_heredoc(t_ast *ast, t_env *env);
 
 // expander functions
 int		ft_len_without_quotes(char *str);
 char	*ft_strip_quotes(char *str, int len);
 char	*expand_token_str(char *str, t_env **env);
-void	ft_expander(t_cmd *cmd_list, t_env **env);
+void	ft_expander(t_ast *ast, t_env **env);
 
 // tools functions
 void	ft_free_array(char **array);
