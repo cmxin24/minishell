@@ -156,7 +156,7 @@ static void	insert_wildcards(t_cmd *cmd, int *i, char **matches)
 
 void	ft_expander(t_ast *ast, t_env **env);
 
-static void	expand_pipeline(t_cmd *cmd_list, t_env **env)
+void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 	int		i;
@@ -167,8 +167,6 @@ static void	expand_pipeline(t_cmd *cmd_list, t_env **env)
 	cmd = cmd_list;
 	while (cmd)
 	{
-		if (cmd->subshell)
-			ft_expander(cmd->subshell, env);
 		if (cmd->content)
 		{
 			i = 0;
@@ -217,7 +215,7 @@ void	ft_expander(t_ast *ast, t_env **env)
 	if (!ast)
 		return ;
 	if (ast->type == AST_PIPELINE)
-		expand_pipeline(ast->pipeline, env);
+		ft_expand_pipeline(ast->pipeline, env);
 	else
 	{
 		ft_expander(ast->left, env);

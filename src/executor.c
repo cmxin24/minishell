@@ -91,12 +91,16 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	struct stat			st;
 	t_redir				*redir;
 	struct sigaction	sa;
+	sigset_t			set;
 
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = SIG_DFL;
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	sigaction(SIGPIPE, &sa, NULL);
+	sigemptyset(&set);
+	sigprocmask(SIG_SETMASK, &set, NULL);
 	temp_env = ft_env_list_to_array(*envp);
 	if (cmd->content && cmd->content[0] && !is_builtin(cmd->content[0]))
 	{
@@ -269,7 +273,10 @@ void	ft_executor(t_ast *ast, t_env **env)
 	if (!ast)
 		return ;
 	if (ast->type == AST_PIPELINE)
+	{
+		ft_expand_pipeline(ast->pipeline, env);
 		execute_pipeline(ast->pipeline, env);
+	}
 	else if (ast->type == AST_AND)
 	{
 		ft_executor(ast->left, env);

@@ -80,7 +80,7 @@ static void	ft_process_line(char *line, t_env **env_list)
 	if (!token_list)
 		return ;
 	ast = ft_parser(token_list);
-	ft_expander(ast, env_list);
+	//ft_expander(ast, env_list);
 	if (ast && ft_process_heredoc(ast, *env_list) == 0)
 		ft_executor(ast, env_list);
 	ft_free_tokens(&token_list);

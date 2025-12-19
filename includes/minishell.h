@@ -149,6 +149,7 @@ int		ft_len_without_quotes(char *str);
 char	*ft_strip_quotes(char *str, int len);
 char	*expand_token_str(char *str, t_env **env);
 void	ft_expander(t_ast *ast, t_env **env);
+void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env);
 
 // tools functions
 void	ft_free_array(char **array);

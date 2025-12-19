@@ -161,40 +161,24 @@ t_ast	*parse_primary(t_token **tokens)
 	return (node);
 }
 
-t_ast	*parse_and(t_token **tokens)
+t_ast	*parse_or(t_token **tokens)
 {
-	t_ast	*left;
-	t_ast	*right;
-	t_ast	*node;
+	t_ast			*left;
+	t_ast			*right;
+	t_ast			*node;
+	t_type_of_token	type;
 
 	left = parse_primary(tokens);
-	while (*tokens && (*tokens)->type == AND)
+	while (*tokens && ((*tokens)->type == AND || (*tokens)->type == OR))
 	{
+		type = (*tokens)->type;
 		*tokens = (*tokens)->next;
 		right = parse_primary(tokens);
 		node = malloc(sizeof(t_ast));
-		node->type = AST_AND;
-		node->left = left;
-		node->right = right;
-		node->pipeline = NULL;
-		left = node;
-	}
-	return (left);
-}
-
-t_ast	*parse_or(t_token **tokens)
-{
-	t_ast	*left;
-	t_ast	*right;
-	t_ast	*node;
-
-	left = parse_and(tokens);
-	while (*tokens && (*tokens)->type == OR)
-	{
-		*tokens = (*tokens)->next;
-		right = parse_and(tokens);
-		node = malloc(sizeof(t_ast));
-		node->type = AST_OR;
+		if (type == AND)
+			node->type = AST_AND;
+		else
+			node->type = AST_OR;
 		node->left = left;
 		node->right = right;
 		node->pipeline = NULL;

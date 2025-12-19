@@ -41,7 +41,7 @@ static int	match(char *pattern, char *string)
 				pattern++;
 				string++;
 			}
-			if (*pattern) pattern++; // Skip closing quote
+			if (*pattern) pattern++;
 		}
 		else
 		{
@@ -55,6 +55,33 @@ static int	match(char *pattern, char *string)
 		while (*pattern == '*')
 			pattern++;
 	return (!*pattern && !*string);
+}
+
+static int	pattern_starts_with_dot(char *pattern)
+{
+	int	i;
+	char	quote;
+
+	i = 0;
+	while (pattern[i])
+	{
+		if (pattern[i] == '.')
+			return (1);
+		if (pattern[i] == '\'' || pattern[i] == '\"')
+		{
+			quote = pattern[i];
+			if (pattern[i + 1] == quote)
+			{
+				i += 2;
+				continue ;
+			}
+			if (pattern[i + 1] == '.')
+				return (1);
+			return (0);
+		}
+		return (0);
+	}
+	return (0);
 }
 
 int	has_wildcard(char *str)
@@ -89,7 +116,9 @@ static int	count_matches(char *pattern)
 	count = 0;
 	while ((entry = readdir(dir)) != NULL)
 	{
-		if (entry->d_name[0] == '.' && pattern[0] != '.')
+		if (ft_strcmp(entry->d_name, ".") == 0 || ft_strcmp(entry->d_name, "..") == 0)
+			continue ;
+		if (entry->d_name[0] == '.' && !pattern_starts_with_dot(pattern))
 			continue ;
 		if (match(pattern, entry->d_name))
 			count++;
@@ -110,7 +139,9 @@ static void	fill_matches(char *pattern, char **matches)
 	i = 0;
 	while ((entry = readdir(dir)) != NULL)
 	{
-		if (entry->d_name[0] == '.' && pattern[0] != '.')
+		if (ft_strcmp(entry->d_name, ".") == 0 || ft_strcmp(entry->d_name, "..") == 0)
+			continue ;
+		if (entry->d_name[0] == '.' && !pattern_starts_with_dot(pattern))
 			continue ;
 		if (match(pattern, entry->d_name))
 			matches[i++] = ft_strdup(entry->d_name);

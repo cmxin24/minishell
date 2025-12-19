@@ -24,26 +24,57 @@ int	syntax_error(char *token)
 static int	ft_check_token_syntax(t_token *tokens)
 {
 	t_token	*temp;
+	int		parens;
 
 	temp = tokens;
-	if (temp && temp->type == PIPE)
-		return (syntax_error("|"));
+	parens = 0;
+	if (temp && (temp->type == PIPE || temp->type == AND || temp->type == OR || temp->type == R_PAREN))
+		return (syntax_error(temp->content));
 	while (temp)
 	{
-		if (temp->type == PIPE)
+		if (temp->type == L_PAREN)
 		{
-			if (temp->next == NULL || temp->next->type == PIPE)
-				return (syntax_error("|"));
-		}
-		else if (temp->type != WORD)
-		{
+			parens++;
+			if (temp->next && (temp->next->type == PIPE || temp->next->type == AND || temp->next->type == OR || temp->next->type == R_PAREN))
+				return (syntax_error(temp->next->content));
 			if (temp->next == NULL)
 				return (syntax_error("newline"));
-			if (temp->next->type != WORD)
+		}
+		else if (temp->type == R_PAREN)
+		{
+			parens--;
+			if (parens < 0)
+				return (syntax_error(")"));
+			if (temp->next && (temp->next->type == WORD || temp->next->type == L_PAREN))
+				return (syntax_error(temp->next->content));
+		}
+		else if (temp->type == PIPE || temp->type == AND || temp->type == OR)
+		{
+			if (temp->next == NULL || temp->next->type == PIPE || temp->next->type == AND || temp->next->type == OR || temp->next->type == R_PAREN)
+			{
+				if (temp->next == NULL)
+					return (syntax_error("newline"));
+				return (syntax_error(temp->next->content));
+			}
+		}
+		else if (temp->type == REDIRECT_IN || temp->type == REDIRECT_OUT || temp->type == APPEND || temp->type == HEREDOC)
+		{
+			if (temp->next == NULL || temp->next->type != WORD)
+			{
+				if (temp->next == NULL)
+					return (syntax_error("newline"));
+				return (syntax_error(temp->next->content));
+			}
+		}
+		else if (temp->type == WORD)
+		{
+			if (temp->next && temp->next->type == L_PAREN)
 				return (syntax_error(temp->next->content));
 		}
 		temp = temp->next;
 	}
+	if (parens != 0)
+		return (syntax_error("newline"));
 	return (1);
 }
 
