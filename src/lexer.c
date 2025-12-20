@@ -6,130 +6,11 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:25:16 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 16:00:36 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/20 21:28:13 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	syntax_error(char *token)
-{
-	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
-	ft_putstr_fd(token, 2);
-	ft_putstr_fd("'\n", 2);
-	g_signal = 258;
-	return (0);
-}
-
-static int	ft_check_token_syntax(t_token *tokens)
-{
-	t_token	*temp;
-	int		parens;
-
-	temp = tokens;
-	parens = 0;
-	if (temp && (temp->type == PIPE || temp->type == AND || temp->type == OR
-			|| temp->type == R_PAREN))
-		return (syntax_error(temp->content));
-	while (temp)
-	{
-		if (temp->type == L_PAREN)
-		{
-			parens++;
-			if (temp->next && (temp->next->type == PIPE
-					|| temp->next->type == AND || temp->next->type == OR
-					|| temp->next->type == R_PAREN))
-				return (syntax_error(temp->next->content));
-			if (temp->next == NULL)
-				return (syntax_error("newline"));
-		}
-		else if (temp->type == R_PAREN)
-		{
-			parens--;
-			if (parens < 0)
-				return (syntax_error(")"));
-			if (temp->next && (temp->next->type == WORD
-					|| temp->next->type == L_PAREN))
-				return (syntax_error(temp->next->content));
-		}
-		else if (temp->type == PIPE || temp->type == AND || temp->type == OR)
-		{
-			if (temp->next == NULL || temp->next->type == PIPE
-				|| temp->next->type == AND || temp->next->type == OR
-				|| temp->next->type == R_PAREN)
-			{
-				if (temp->next == NULL)
-					return (syntax_error("newline"));
-				return (syntax_error(temp->next->content));
-			}
-		}
-		else if (temp->type == REDIRECT_IN || temp->type == REDIRECT_OUT
-			|| temp->type == APPEND || temp->type == HEREDOC)
-		{
-			if (temp->next == NULL || temp->next->type != WORD)
-			{
-				if (temp->next == NULL)
-					return (syntax_error("newline"));
-				return (syntax_error(temp->next->content));
-			}
-		}
-		else if (temp->type == WORD)
-		{
-			if (temp->next && temp->next->type == L_PAREN)
-				return (syntax_error(temp->next->content));
-		}
-		temp = temp->next;
-	}
-	if (parens != 0)
-		return (syntax_error("newline"));
-	return (1);
-}
-
-static int	handle_operator(char *line, int i, t_token **t)
-{
-	if (line[i] == '|')
-	{
-		if (line[i + 1] == '|')
-			return (add_token(t, create_token(ft_strdup("||"), OR)), i + 2);
-		return (add_token(t, create_token(ft_strdup("|"), PIPE)), i + 1);
-	}
-	else if (line[i] == '&')
-	{
-		if (line[i + 1] == '&')
-			return (add_token(t, create_token(ft_strdup("&&"), AND)), i + 2);
-		return (add_token(t, create_token(ft_strdup("&"), WORD)), i + 1);
-	}
-	else if (line[i] == '(')
-		return (add_token(t, create_token(ft_strdup("("), L_PAREN)), i + 1);
-	else if (line[i] == ')')
-		return (add_token(t, create_token(ft_strdup(")"), R_PAREN)), i + 1);
-	else if (line[i] == '<')
-	{
-		if (line[i + 1] == '<')
-		{
-			add_token(t, create_token(ft_strdup("<<"), HEREDOC));
-			return (i + 2);
-		}
-		add_token(t, create_token(ft_strdup("<"), REDIRECT_IN));
-		return (i + 1);
-	}
-	else if (line[i] == '>')
-	{
-		if (line[i + 1] == '>')
-		{
-			add_token(t, create_token(ft_strdup(">>"), APPEND));
-			return (i + 2);
-		}
-		if (line[i + 1] == '|')
-		{
-			add_token(t, create_token(ft_strdup(">"), REDIRECT_OUT));
-			return (i + 2);
-		}
-		add_token(t, create_token(ft_strdup(">"), REDIRECT_OUT));
-		return (i + 1);
-	}
-	return (i);
-}
 
 static int	handle_word(char *line, int i, t_token **list)
 {
@@ -160,13 +41,10 @@ static int	handle_word(char *line, int i, t_token **list)
 	return (add_token(list, create_token(word, WORD)), i);
 }
 
-t_token	*ft_lexer(char *line)
+static t_token	*lexer_tokenize(char *line)
 {
 	t_token	*list;
-	t_token	*temp;
 	int		i;
-	char	*heredoc_line;
-	char	*trimmed;
 
 	list = NULL;
 	i = 0;
@@ -183,43 +61,67 @@ t_token	*ft_lexer(char *line)
 		else
 			i = handle_word(line, i, &list);
 	}
+	return (list);
+}
+
+static int	is_heredoc_delimiter(char *line, char *delim)
+{
+	char	*trimmed;
+	int		match;
+
+	if (isatty(STDIN_FILENO))
+		return (ft_strcmp(line, delim) == 0);
+	trimmed = ft_strtrim(line, "\n");
+	match = (ft_strcmp(trimmed, delim) == 0);
+	free(trimmed);
+	return (match);
+}
+
+static void	skip_one_heredoc(t_token *t)
+{
+	char	*line;
+
+	while (1)
+	{
+		if (isatty(STDIN_FILENO))
+			line = readline("> ");
+		else
+			line = get_next_line(STDIN_FILENO);
+		if (!line)
+			break ;
+		if (is_heredoc_delimiter(line, t->next->content))
+		{
+			free(line);
+			break ;
+		}
+		free(line);
+	}
+}
+
+/**
+ * @brief convert the input line into a list of tokens
+ * @note
+ * 1. skip whitespace
+ * 2. identify operators and create corresponding tokens
+ * 3. identify words and create corresponding tokens
+ * 4. check for syntax errors in the token list
+ */
+t_token	*ft_lexer(char *line)
+{
+	t_token	*list;
+	t_token	*temp;
+
+	list = lexer_tokenize(line);
+	if (!list)
+		return (NULL);
 	if (!ft_check_token_syntax(list))
 	{
 		temp = list;
 		while (temp)
 		{
-			if (temp->type == HEREDOC && temp->next && temp->next->type == WORD)
-			{
-				while (1)
-				{
-					if (isatty(STDIN_FILENO))
-						heredoc_line = readline("> ");
-					else
-						heredoc_line = get_next_line(STDIN_FILENO);
-					if (!heredoc_line)
-						break ;
-					if (isatty(STDIN_FILENO)
-						&& ft_strcmp(heredoc_line, temp->next->content) == 0)
-					{
-						free(heredoc_line);
-						break ;
-					}
-					if (!isatty(STDIN_FILENO))
-					{
-						trimmed = ft_strtrim(heredoc_line, "\n");
-						if (ft_strcmp(trimmed, temp->next->content) == 0)
-						{
-							free(trimmed);
-							free(heredoc_line);
-							break ;
-						}
-						free(trimmed);
-						free(heredoc_line);
-					}
-					else
-						free(heredoc_line);
-				}
-			}
+			if (temp->type == HEREDOC && temp->next
+				&& temp->next->type == WORD)
+				skip_one_heredoc(temp);
 			temp = temp->next;
 		}
 		ft_free_tokens(&list);

@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 18:05:24 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/20 21:30:49 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,5 +168,17 @@ void	ft_free_tokens(t_token **token_list);
 int		syntax_error(char *token);
 int		ft_is_separator(char c);
 t_token	*ft_lexer(char *line);
+int		ft_check_token_syntax(t_token *tokens);
+int		handle_pipe(char *line, int i, t_token **t);
+int		handle_and(char *line, int i, t_token **t);
+int		handle_redirect_in(char *line, int i, t_token **t);
+int		handle_redirect_out(char *line, int i, t_token **t);
+int		handle_paren(char c, int i, t_token **t);
+int		handle_operator(char *line, int i, t_token **t);
+int		check_lparen(t_token *t, int *parens);
+int		check_rparen(t_token *t, int *parens);
+int		check_operator(t_token *t);
+int		check_redirect(t_token *t);
+int		check_word(t_token *t);
 
 #endif

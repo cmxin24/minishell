@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 16:01:28 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/20 21:28:18 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ int	has_unclosed_quote(char *str)
 	return (quote != 0);
 }
 
+/**
+ * @brief process a single line of input
+ * @note
+ * 1. lexing: convert the input line into a list of tokens
+ * 2. parsing: convert the list of tokens into an abstract syntax tree (AST)
+ * 3. heredoc processing: handle any heredoc syntax in the AST
+ * 4. execution: execute the commands represented by the AST
+ */
 static void	ft_process_line(char *line, t_env **env_list)
 {
 	t_ast	*ast;
@@ -74,6 +82,12 @@ static void	ft_main_stream(char *line, char **lines, t_env **env_list)
 		ft_process_line(line, env_list);
 }
 
+/**
+ * @brief main function of minishell
+ * @note
+ * if user input EOF(Ctrl+D), then (!line), minishell will exit
+ * isatty() check if the input is from terminal, only add history from terminal
+ */
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 14:19:10 by xin               #+#    #+#             */
-/*   Updated: 2025/12/12 19:30:30 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/19 18:31:05 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	ft_set_env_value(t_env **env, char *key, char *value)
 		temp = temp->next;
 	}
 	new = malloc(sizeof(t_env));
+	if (!new)
+		return ;
 	new->key = ft_strdup(key);
 	new->value = ft_strdup(value);
 	new->next = *env;

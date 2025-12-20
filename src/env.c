@@ -6,12 +6,18 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:33:29 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 18:09:39 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/19 18:32:06 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/**
+ * @brief copy a new environment variable node from "KEY=VALUE"
+ * @note 
+ * KEY will never have '=', but value can: VAR=hello=world
+ * VALUE can be an empty string, but not NULL
+ */
 static t_env	*ft_new_env_node(char *str)
 {
 	t_env	*new_node;
@@ -32,6 +38,11 @@ static t_env	*ft_new_env_node(char *str)
 	return (new_node);
 }
 
+/**
+ * @brief get SHLVL from env then +1, if not exist, set it to 1
+ * @note
+ * SHLVL value may bigger than 9, is a string not char
+ */
 static void	ft_set_shlvl(t_env	*list)
 {
 	char	*shlvl_value;
@@ -51,6 +62,11 @@ static void	ft_set_shlvl(t_env	*list)
 		ft_set_env_value(&list, "SHLVL", "1");
 }
 
+/**
+ * @brief copy an environment variable linked list from system envp
+ * @note
+ * the different is must set SHLVL(shell level) +1
+ */
 t_env	*ft_init_env(char **env)
 {
 	t_env	*list;

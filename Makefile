@@ -6,7 +6,7 @@
 #    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr        #
+#    Updated: 2025/12/20 21:30:55 by xin              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,9 @@ GNL_DIR			=	lib/get_next_line
 SRCS 		:=	src/main.c			\
 				src/lexer.c			\
 				src/lexer_2.c		\
+				src/lexer_3.c		\
+				src/lexer_4.c		\
+				src/lexer_5.c		\
 				src/token.c			\
 				src/parser.c		\
 				src/parser_2.c		\
