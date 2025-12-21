@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+         #
+#    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/21 18:30:13 by meyu             ###   ########.fr        #
+#    Updated: 2025/12/22 00:36:01 by xin              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,18 +45,28 @@ SRCS 		:=	src/main.c			\
 				src/parser_3.c		\
 				src/executor.c		\
 				src/executor_2.c	\
+				src/executor_3.c	\
+				src/executor_4.c	\
+				src/executor_5.c	\
 				src/expander.c		\
 				src/expander_2.c	\
+				src/expander_3.c	\
+				src/expander_4.c	\
+				src/expander_5.c	\
+				src/expander_6.c	\
+				src/expander_7.c	\
 				src/env.c			\
 				src/env_2.c			\
 				src/builtin.c		\
 				src/builtin_2.c		\
 				src/builtin_3.c		\
+				src/builtin_4.c		\
 				src/signal.c		\
 				src/heredoc.c		\
 				src/heredoc_2.c		\
 				src/free.c			\
-				src/wildcard.c
+				src/wildcard.c		\
+				src/wildcard_2.c
 
 OBJ := $(SRCS:src/%.c=build/minishell/%.o)
 

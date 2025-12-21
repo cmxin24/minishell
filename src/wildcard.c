@@ -6,59 +6,12 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 10:00:00 by copilot           #+#    #+#             */
-/*   Updated: 2025/12/21 14:03:44 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 00:35:44 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <dirent.h>
-
-static int	match(char *pattern, char *string)
-{
-	char	quote;
-
-	while (*pattern && *string)
-	{
-		if (*pattern == '*')
-		{
-			while (*pattern == '*')
-				pattern++;
-			if (!*pattern)
-				return (1);
-			while (*string)
-			{
-				if (match(pattern, string))
-					return (1);
-				string++;
-			}
-			return (0);
-		}
-		if (*pattern == '\'' || *pattern == '\"')
-		{
-			quote = *pattern++;
-			while (*pattern && *pattern != quote)
-			{
-				if (*pattern != *string)
-					return (0);
-				pattern++;
-				string++;
-			}
-			if (*pattern)
-				pattern++;
-		}
-		else
-		{
-			if (*pattern != *string)
-				return (0);
-			pattern++;
-			string++;
-		}
-	}
-	if (*pattern == '*')
-		while (*pattern == '*')
-			pattern++;
-	return (!*pattern && !*string);
-}
 
 static int	pattern_starts_with_dot(char *pattern)
 {
@@ -83,26 +36,6 @@ static int	pattern_starts_with_dot(char *pattern)
 			return (0);
 		}
 		return (0);
-	}
-	return (0);
-}
-
-int	has_wildcard(char *str)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if ((str[i] == '\'' || str[i] == '\"') && quote == 0)
-			quote = str[i];
-		else if (str[i] == quote)
-			quote = 0;
-		else if (str[i] == '*' && quote == 0)
-			return (1);
-		i++;
 	}
 	return (0);
 }

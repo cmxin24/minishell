@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 18:35:59 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 00:49:48 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,26 @@ typedef struct s_env
 	struct s_env		*next;
 }	t_env;
 
+typedef struct s_expand_ctx
+{
+	char	*str;
+	char	*result;
+	int		i;
+	int		start;
+	int		in_single;
+	int		in_double;
+	t_env	**env;
+}	t_expand_ctx;
+
+typedef struct s_strip_ctx
+{
+	char	*str;
+	int		i;
+	int		j;
+	char	quote;
+	char	*dst;
+}	t_strip_ctx;
+
 //main functions
 char	*ft_get_input(void);
 int		count_lines(char *line, int i, int in_word);
@@ -134,17 +154,16 @@ char	**ft_env_list_to_array(t_env *env_list, int i);
 // built-in functions
 int		ft_pwd(void);
 int		ft_env(t_env *env, char **args);
+int		cd_get_target_path(char **args, t_env **env,
+			char **path, int *print_path);
 int		ft_cd(char **args, t_env **env);
-
-// wildcard functions
-char	**expand_wildcard(char *pattern);
-int		ft_exit(char **args, t_env *env);
+int		ft_exit(char **args, t_env *env, int print);
 int		echo_n_flag(char *str);
 int		ft_echo(char **args);
 int		ft_export(char **args, t_env **env);
 int		ft_unset(char **args, t_env **env);
 int		is_builtin(char *cmd);
-int		exec_builtin(char **args, t_env **env);
+int		exec_builtin(char **args, t_env **env, int is_child);
 int		ft_is_valid_identifier(char *str);
 void	ft_indentifier_error(char *cmd, char *arg);
 int		ft_check_exit(char *str);
@@ -161,10 +180,15 @@ t_ast	*parse_primary(t_token **tokens);
 t_cmd	*ft_parse_pipeline(t_token **tokens);
 
 // executor functions
-void	ft_executor(t_ast *ast, t_env **env);
+void	ft_executor(t_ast *ast, t_env **env, int is_subshell);
 int		ft_builtin_redirect(t_cmd *cmd, int *saved_stdout, int *saved_stdin);
 void	ft_restore_io(int saved_stdout, int saved_stdin);
 int		ft_process_heredoc(t_ast *ast, t_env *env);
+char	*find_command_path(char *cmd, char **envp, int i, char *temp);
+void	ft_wait_for_children(pid_t last_pid);
+void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in);
+int		open_input_redir(t_redir *redir);
+int		open_output_redir(t_redir *redir);
 
 // expander functions
 int		ft_len_without_quotes(char *str);
@@ -172,6 +196,15 @@ char	*ft_strip_quotes(char *str, int len);
 char	*expand_token_str(char *str, t_env **env);
 void	ft_expander(t_ast *ast, t_env **env);
 void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env);
+char	**list_to_array(t_list *list);
+void	free_list_nodes(t_list *list);
+char	**ft_split_unquoted(char *str);
+void	expand_command_args(t_cmd *cmd, t_env **env);
+char	*ft_strjoin_free(char *s1, char *s2);
+int		get_var_len(char *str);
+void	process_expand_char(t_expand_ctx *ctx);
+int		strip_should_escape(t_strip_ctx *ctx);
+void	strip_handle_escape(t_strip_ctx *ctx);
 
 // tools functions
 void	ft_free_array(char **array);
@@ -197,5 +230,10 @@ int		check_rparen(t_token *t, int *parens);
 int		check_operator(t_token *t);
 int		check_redirect(t_token *t);
 int		check_word(t_token *t);
+
+// wildcard functions
+char	**expand_wildcard(char *pattern);
+int		match(char *pattern, char *string);
+int		has_wildcard(char *str);
 
 #endif

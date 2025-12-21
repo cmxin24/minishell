@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 18:41:17 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 00:47:06 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	ft_process_line(char *line, t_env **env_list)
 		return ;
 	ast = ft_parser(token_list);
 	if (ast && ft_process_heredoc(ast, *env_list) == 0)
-		ft_executor(ast, env_list);
+		ft_executor(ast, env_list, 0);
 	ft_free_tokens(&token_list);
 	ft_free_ast(ast);
 }

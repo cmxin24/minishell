@@ -3,139 +3,90 @@
 /*                                                        :::      ::::::::   */
 /*   expander_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 19:44:00 by xin               #+#    #+#             */
-/*   Updated: 2025/12/16 15:14:43 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 23:49:58 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	get_var_len(char *str)
+static void	update_quote_state(t_expand_ctx *ctx)
 {
-	int	i;
-
-	i = 0;
-	if (str[i] == '?')
-		return (1);
-	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		i++;
-	return (i);
+	if (ctx->str[ctx->i] == '\'' && !ctx->in_double)
+		ctx->in_single = !ctx->in_single;
+	else if (ctx->str[ctx->i] == '\"' && !ctx->in_single)
+		ctx->in_double = !ctx->in_double;
 }
 
-char	*expand_token_str(char *str, t_env **env)
+static int	should_skip_escape(t_expand_ctx *ctx)
 {
-	char	*result;
-	char	*temp;
-	char	*var_key;
-	char	*var_value;
-	char	*env_val;
-	int		i;
-	int		start;
-	int		in_single_quote;
-	int		in_double_quote;
-	char	*new_result;
-	char	*final_result;
-	int		var_len;
-	char	*home;
+	if (ctx->str[ctx->i] != '\\' || ctx->in_single)
+		return (0);
+	if (!ctx->in_double)
+		return (1);
+	if (ctx->in_double
+		&& (ctx->str[ctx->i + 1] == '$'
+			|| ctx->str[ctx->i + 1] == '\"'
+			|| ctx->str[ctx->i + 1] == '\\'))
+		return (1);
+	return (0);
+}
 
-	result = ft_strdup("");
-	i = 0;
-	if (str[0] == '~' && (str[1] == '\0' || str[1] == '/'))
+static char	*get_var_value(t_expand_ctx *ctx, int *len)
+{
+	char	*key;
+	char	*val;
+
+	*len = get_var_len(&ctx->str[ctx->i]);
+	if (*len == 0 && (ctx->str[ctx->i] == '\'' || ctx->str[ctx->i] == '\"'))
+		return (ft_strdup(""));
+	if (*len == 0)
 	{
-		home = ft_get_env_value(*env, "HOME");
-		if (home)
-		{
-			free(result);
-			result = ft_strdup(home);
-			i++;
-		}
+		*len = 1;
+		return (ft_substr(ctx->str, ctx->i - 1, 2));
 	}
-	start = i;
-	in_single_quote = 0;
-	in_double_quote = 0;
-	while (str[i])
+	if (*len == 1 && ctx->str[ctx->i] == '?')
+		return (ft_itoa(g_signal));
+	key = ft_substr(ctx->str, ctx->i, *len);
+	val = ft_get_env_value(*ctx->env, key);
+	free(key);
+	if (val)
+		return (ft_strdup(val));
+	return (ft_strdup(""));
+}
+
+static void	handle_dollar(t_expand_ctx *ctx)
+{
+	char	*prefix;
+	char	*var;
+	int		len;
+
+	prefix = ft_substr(ctx->str, ctx->start, ctx->i - ctx->start);
+	ctx->result = ft_strjoin_free(ctx->result, prefix);
+	ctx->i++;
+	var = get_var_value(ctx, &len);
+	ctx->result = ft_strjoin_free(ctx->result, var);
+	ctx->i += len;
+	ctx->start = ctx->i;
+}
+
+void	process_expand_char(t_expand_ctx *ctx)
+{
+	if (should_skip_escape(ctx))
 	{
-		if (str[i] == '\\' && !in_single_quote)
-		{
-			if (!in_double_quote)
-			{
-				i++;
-				if (str[i])
-					i++;
-				continue ;
-			}
-			else if (in_double_quote && (str[i + 1] == '$' || str[i + 1] == '\"'
-					|| str[i + 1] == '\\'))
-			{
-				i++;
-				if (str[i])
-					i++;
-				continue ;
-			}
-		}
-		if (str[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (str[i] == '\"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		if (str[i] == '$' && !in_single_quote && str[i + 1] == '\"'
-			&& !in_double_quote)
-		{
-			temp = ft_substr(str, start, i - start);
-			new_result = ft_strjoin(result, temp);
-			free(result);
-			free(temp);
-			result = new_result;
-			i++;
-			start = i;
-			continue ;
-		}
-		if (str[i] == '$' && !in_single_quote && str[i + 1]
-			&& str[i + 1] != ' ' && !(in_double_quote && str[i + 1] == '\"'))
-		{
-			temp = ft_substr(str, start, i - start);
-			new_result = ft_strjoin(result, temp);
-			free(result);
-			free(temp);
-			result = new_result;
-			i++;
-			var_len = get_var_len(&str[i]);
-			if (var_len == 0 && (str[i] == '\'' || str[i] == '"'))
-			{
-				var_value = ft_strdup("");
-				var_len = 0;
-			}
-			else if (var_len == 0)
-			{
-				var_value = ft_substr(str, i - 1, 2);
-				var_len = 1;
-			}
-			else if (var_len == 1 && str[i] == '?')
-				var_value = ft_itoa(g_signal);
-			else
-			{
-				var_key = ft_substr(str, i, var_len);
-				env_val = ft_get_env_value(*env, var_key);
-				if (env_val)
-					var_value = ft_strdup(env_val);
-				else
-					var_value = ft_strdup("");
-				free(var_key);
-			}
-			new_result = ft_strjoin(result, var_value);
-			free(result);
-			free(var_value);
-			result = new_result;
-			i += var_len;
-			start = i;
-		}
-		else
-			i++;
+		ctx->i += 2;
+		return ;
 	}
-	temp = ft_substr(str, start, i - start);
-	final_result = ft_strjoin(result, temp);
-	free(result);
-	free(temp);
-	return (final_result);
+	update_quote_state(ctx);
+	if (ctx->str[ctx->i] == '$'
+		&& !ctx->in_single
+		&& ctx->str[ctx->i + 1]
+		&& !(ctx->in_double && ctx->str[ctx->i + 1] == '\"'))
+	{
+		handle_dollar(ctx);
+		return ;
+	}
+	ctx->i++;
 }

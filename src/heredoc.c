@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 20:52:22 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 16:40:28 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 23:59:36 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,57 @@ static char	*ft_heredoc_filename(void)
 	return (filename);
 }
 
-static int	heredoc_input_loop(char *delimiter, int fd, t_env *env, int quotes)
+static char	*heredoc_read_line(void)
 {
 	char	*line;
-	char	*expanded_line;
 	char	*trimmed;
+
+	if (isatty(STDIN_FILENO))
+		line = readline("> ");
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			trimmed = ft_strtrim(line, "\n");
+			free(line);
+			line = trimmed;
+		}
+	}
+	return (line);
+}
+
+static int	heredoc_should_stop(char *line, char *delimiter,
+	t_env *env, int quotes)
+{
+	char	*expanded;
+
+	if (quotes == 0)
+	{
+		expanded = expand_heredoc_line(line, env);
+		if (ft_strcmp(expanded, delimiter) == 0)
+		{
+			free(expanded);
+			return (1);
+		}
+		free(expanded);
+	}
+	else
+	{
+		if (ft_strcmp(line, delimiter) == 0)
+			return (1);
+	}
+	return (0);
+}
+
+static int	heredoc_input_loop(char *delimiter, int fd,
+	t_env *env, int quotes)
+{
+	char	*line;
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO))
-			line = readline("> ");
-		else
-			line = get_next_line(STDIN_FILENO);
+		line = heredoc_read_line();
 		if (g_signal == 130)
 			break ;
 		if (!line)
@@ -45,31 +84,10 @@ static int	heredoc_input_loop(char *delimiter, int fd, t_env *env, int quotes)
 			ft_putstr_fd("' not found\n", 2);
 			break ;
 		}
-		if (!isatty(STDIN_FILENO))
+		if (heredoc_should_stop(line, delimiter, env, quotes))
 		{
-			trimmed = ft_strtrim(line, "\n");
 			free(line);
-			line = trimmed;
-		}
-		if (quotes == 0)
-		{
-			expanded_line = expand_heredoc_line(line, env);
-			if (ft_strcmp(expanded_line, delimiter) == 0)
-			{
-				free(line);
-				free(expanded_line);
-				break ;
-			}
-			free(line);
-			line = expanded_line;
-		}
-		else
-		{
-			if (ft_strcmp(line, delimiter) == 0)
-			{
-				free(line);
-				break ;
-			}
+			break ;
 		}
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
@@ -83,30 +101,22 @@ int	ft_heredoc(t_redir *redir, t_env *env)
 	int		fd;
 	int		stdin_backup;
 	char	*filename;
-	char	*delimiter;
-	int		quotes;
 	int		result;
 
-	delimiter = redir->file;
-	quotes = redir->heredoc_quoted;
 	filename = ft_heredoc_filename();
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (free(filename), -1);
 	stdin_backup = dup(STDIN_FILENO);
 	ft_set_heredoc_signals();
-	result = heredoc_input_loop(delimiter, fd, env, quotes);
+	result = heredoc_input_loop(redir->file, fd,
+			env, redir->heredoc_quoted);
 	ft_restore_signals();
 	dup2(stdin_backup, STDIN_FILENO);
 	close(stdin_backup);
 	close(fd);
 	if (g_signal == 130)
-	{
-		unlink(filename);
-		free(filename);
-		return (-1);
-	}
+		return (unlink(filename), free(filename), -1);
 	free(redir->file);
-	redir->file = filename;
-	return (result);
+	return (redir->file = filename, result);
 }
