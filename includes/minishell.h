@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 13:57:34 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 16:25:46 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,9 @@ char	*expand_heredoc_line(char *line, t_env *env);
 void	ft_disable_echo_ctl(void);
 void	ft_init_signals(void);
 void	ft_handle_sigint(int sig);
+void	ft_handle_heredoc_sigint(int signum);
+void	ft_set_heredoc_signals(void);
+void	ft_restore_signals(void);
 
 // environment functions
 t_env	*ft_init_env(char **envp);

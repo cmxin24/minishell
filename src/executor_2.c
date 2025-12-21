@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:25:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 16:31:25 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ static int	process_heredoc_pipeline(t_cmd *cmd, t_env *env)
 				redir->file = stripped_delim;
 				if (ft_heredoc(redir, env) == -1)
 				{
-					perror("heredoc");
+					if (g_signal != 130)
+						perror("heredoc");
 					return (-1);
 				}
 			}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:45:58 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 17:04:58 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 16:44:20 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,18 @@ void	ft_handle_sigint(int signum)
 }
 
 /**
+ * @brief Signal handler for heredoc input (Ctrl+C)
+ * @note
+ * allows readline() to be interrupted by SIGINT during heredoc input
+ */
+void	ft_handle_heredoc_sigint(int signum)
+{
+	(void)signum;
+	g_signal = 130;
+	close(STDIN_FILENO);
+}
+
+/**
  * @brief set the different reactions when user input a signal
  * @param sa_int	ctrl c means interrupt
  * @param sa_quit	ctrl \ means quit 
@@ -65,4 +77,29 @@ void	ft_init_signals(void)
 	sa_quit.sa_handler = SIG_IGN;
 	sa_quit.sa_flags = 0;
 	sigaction(SIGQUIT, &sa_quit, NULL);
+}
+
+/**
+ * @brief Set signal handlers for heredoc input
+ * @note
+ * No SA_RESTART flag so readline can be interrupted
+ */
+void	ft_set_heredoc_signals(void)
+{
+	struct sigaction	sa_int;
+
+	rl_catch_signals = 0;
+	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_handler = ft_handle_heredoc_sigint;
+	sa_int.sa_flags = 0;
+	sigaction(SIGINT, &sa_int, NULL);
+}
+
+/**
+ * @brief Restore normal signal handlers
+ */
+void	ft_restore_signals(void)
+{
+	rl_catch_signals = 1;
+	ft_init_signals();
 }

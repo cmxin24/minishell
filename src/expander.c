@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:47:12 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 13:54:30 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 17:02:51 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,104 +105,214 @@ char	*ft_strip_quotes(char *str, int len)
 	return (new_str[j] = '\0', new_str);
 }
 
-static void	remove_empty_arg(t_cmd *cmd, int index)
+static int	ft_isspace(char c)
 {
-	int	i;
+	return (c == ' ' || c == '\t' || c == '\n');
+}
 
-	free(cmd->content[index]);
-	i = index;
-	while (cmd->content[i + 1])
+static int	count_words(char *str)
+{
+	int		i;
+	int		count;
+	char	quote;
+
+	i = 0;
+	count = 0;
+	quote = 0;
+	if (!str)
+		return (0);
+	while (str[i])
 	{
-		cmd->content[i] = cmd->content[i + 1];
+		while (str[i] && ft_isspace(str[i]))
+			i++;
+		if (str[i])
+			count++;
+		while (str[i])
+		{
+			if ((str[i] == '\'' || str[i] == '\"') && !quote)
+				quote = str[i];
+			else if (str[i] == quote)
+				quote = 0;
+			if (ft_isspace(str[i]) && !quote)
+				break ;
+			i++;
+		}
+	}
+	return (count);
+}
+
+static char	*get_next_word(char *str, int *index)
+{
+	int		i;
+	int		start;
+	char	quote;
+
+	i = *index;
+	quote = 0;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	start = i;
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '\"') && !quote)
+			quote = str[i];
+		else if (str[i] == quote)
+			quote = 0;
+		if (ft_isspace(str[i]) && !quote)
+			break ;
 		i++;
 	}
-	cmd->content[i] = NULL;
+	*index = i;
+	return (ft_substr(str, start, i - start));
 }
 
-static void	insert_wildcards(t_cmd *cmd, int *i, char **matches)
+static char	**ft_split_unquoted(char *str)
 {
-	int		old_len;
-	int		match_len;
-	char	**new_content;
-	int		j;
-	int		k;
+	int		count;
+	char	**result;
+	int		i;
+	int		str_index;
 
-	old_len = 0;
-	while (cmd->content[old_len])
-		old_len++;
-	match_len = 0;
-	while (matches[match_len])
-		match_len++;
-	new_content = malloc(sizeof(char *) * (old_len + match_len));
-	if (!new_content)
-		return ;
-	j = 0;
-	k = 0;
-	while (k < *i)
-		new_content[j++] = cmd->content[k++];
-	k = 0;
-	while (k < match_len)
-		new_content[j++] = matches[k++];
-	k = *i + 1;
-	while (k < old_len)
-		new_content[j++] = cmd->content[k++];
-	new_content[j] = NULL;
-	free(cmd->content[*i]);
-	free(cmd->content);
-	free(matches);
-	cmd->content = new_content;
-	*i += match_len;
+	if (!str)
+		return (NULL);
+	count = count_words(str);
+	result = malloc(sizeof(char *) * (count + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	str_index = 0;
+	while (i < count)
+	{
+		result[i] = get_next_word(str, &str_index);
+		i++;
+	}
+	result[i] = NULL;
+	return (result);
 }
 
-void	ft_expander(t_ast *ast, t_env **env);
+static char	**list_to_array(t_list *list)
+{
+	int		len;
+	char	**array;
+	int		i;
+	t_list	*tmp;
+
+	len = ft_lstsize(list);
+	array = malloc(sizeof(char *) * (len + 1));
+	if (!array)
+		return (NULL);
+	i = 0;
+	tmp = list;
+	while (tmp)
+	{
+		array[i++] = tmp->content;
+		tmp = tmp->next;
+	}
+	array[i] = NULL;
+	return (array);
+}
+
+static void	free_list_nodes(t_list *list)
+{
+	t_list	*tmp;
+
+	while (list)
+	{
+		tmp = list;
+		list = list->next;
+		free(tmp);
+	}
+}
 
 void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 	int		i;
-	char	*old_str;
+	char	*expanded;
 	t_redir	*redir;
 	char	**matches;
+	t_list	*new_args;
+	char	**split;
+	int		j;
+	int		k;
+	char	*final;
 
 	cmd = cmd_list;
 	while (cmd)
 	{
 		if (cmd->content)
 		{
+			new_args = NULL;
 			i = 0;
 			while (cmd->content[i])
 			{
-				old_str = expand_token_str(cmd->content[i], env);
-				free(cmd->content[i]);
-				cmd->content[i] = old_str;
-				if (cmd->content[i][0] == '\0')
+				expanded = expand_token_str(cmd->content[i], env);
+				split = ft_split_unquoted(expanded);
+				free(expanded);
+				if (!split)
 				{
-					remove_empty_arg(cmd, i);
+					i++;
 					continue ;
 				}
-				matches = expand_wildcard(cmd->content[i]);
-				if (matches)
+				j = 0;
+				while (split[j])
 				{
-					insert_wildcards(cmd, &i, matches);
-					continue ;
+					matches = expand_wildcard(split[j]);
+					if (matches)
+					{
+						k = 0;
+						while (matches[k])
+						{
+							final = ft_strip_quotes(matches[k], 0);
+							ft_lstadd_back(&new_args, ft_lstnew(final));
+							free(matches[k]);
+							k++;
+						}
+						free(matches);
+					}
+					else
+					{
+						final = ft_strip_quotes(split[j], 0);
+						if (final)
+							ft_lstadd_back(&new_args, ft_lstnew(final));
+					}
+					free(split[j]);
+					j++;
 				}
-				old_str = ft_strip_quotes(cmd->content[i], 0);
-				free(cmd->content[i]);
-				cmd->content[i] = old_str;
+				free(split);
 				i++;
 			}
+			i = 0;
+			while (cmd->content[i])
+				free(cmd->content[i++]);
+			free(cmd->content);
+			cmd->content = list_to_array(new_args);
+			free_list_nodes(new_args);
 		}
 		redir = cmd->redirs;
 		while (redir)
 		{
 			if (redir->type != REDIR_HEREDOC)
 			{
-				old_str = expand_token_str(redir->file, env);
+				expanded = expand_token_str(redir->file, env);
 				free(redir->file);
-				redir->file = old_str;
-				old_str = ft_strip_quotes(redir->file, 0);
+				redir->file = expanded;
+				matches = expand_wildcard(redir->file);
+				if (matches)
+				{
+					if (matches[0] && !matches[1])
+					{
+						free(redir->file);
+						redir->file = ft_strdup(matches[0]);
+					}
+					k = 0;
+					while (matches[k])
+						free(matches[k++]);
+					free(matches);
+				}
+				expanded = ft_strip_quotes(redir->file, 0);
 				free(redir->file);
-				redir->file = old_str;
+				redir->file = expanded;
 			}
 			redir = redir->next;
 		}
