@@ -2,3 +2,5 @@ minishell
 *.o
 *.a
 /minishell_tester/
+sub.sub
+text.txt
