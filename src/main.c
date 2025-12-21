@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 18:12:48 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 18:41:17 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 /**
  * @brief process a single line of input
  * @note
- * 1. lexing: convert the input line into a list of tokens
- * 2. parsing: convert the list of tokens into an abstract syntax tree (AST)
- * 3. heredoc processing: handle any heredoc syntax in the AST
- * 4. execution: execute the commands represented by the AST
+ * lexing: convert the input line into a list of tokens
+ * parsing: convert the list of tokens into an abstract syntax tree (AST)
+ * heredoc processing: handle any heredoc syntax in the AST
+ * execution: execute the commands represented by the AST
  */
 static void	ft_process_line(char *line, t_env **env_list)
 {
