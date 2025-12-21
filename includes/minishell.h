@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 18:09:39 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 18:35:59 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,14 @@ int		ft_check_exit(char *str);
 
 // parser functions
 t_ast	*ft_parser(t_token *tokens);
+t_ast	*parse_or(t_token **tokens);
 void	ft_redirection(t_cmd *cmd, t_token **token);
+t_cmd	*parse_subshell(t_token **tokens);
+t_cmd	*ft_new_cmd(void);
+void	ft_add_cmd(t_cmd **list, t_cmd **current, t_cmd *new_cmd);
+int		ft_count_args(t_token *token);
+t_ast	*parse_primary(t_token **tokens);
+t_cmd	*ft_parse_pipeline(t_token **tokens);
 
 // executor functions
 void	ft_executor(t_ast *ast, t_env **env);

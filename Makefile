@@ -6,7 +6,7 @@
 #    By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/21 18:04:10 by meyu             ###   ########.fr        #
+#    Updated: 2025/12/21 18:30:13 by meyu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS 		:=	src/main.c			\
 				src/token.c			\
 				src/parser.c		\
 				src/parser_2.c		\
+				src/parser_3.c		\
 				src/executor.c		\
 				src/executor_2.c	\
 				src/expander.c		\

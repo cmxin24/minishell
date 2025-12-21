@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 16:45:58 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 16:44:20 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 18:14:16 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,4 @@ void	ft_set_heredoc_signals(void)
 	sa_int.sa_handler = ft_handle_heredoc_sigint;
 	sa_int.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
-}
-
-/**
- * @brief Restore normal signal handlers
- */
-void	ft_restore_signals(void)
-{
-	rl_catch_signals = 1;
-	ft_init_signals();
 }

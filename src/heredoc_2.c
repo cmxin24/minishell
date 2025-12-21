@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 20:18:09 by xin               #+#    #+#             */
-/*   Updated: 2025/12/09 00:23:00 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 18:14:25 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,13 @@ char	*expand_heredoc_line(char *line, t_env *env)
 	free(res);
 	free(temp);
 	return (final);
+}
+
+/**
+ * @brief restore normal signal handlers
+ */
+void	ft_restore_signals(void)
+{
+	rl_catch_signals = 1;
+	ft_init_signals();
 }
