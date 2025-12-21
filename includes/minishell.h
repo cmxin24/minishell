@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 16:25:46 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 18:09:39 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,16 @@ typedef struct s_env
 	struct s_env		*next;
 }	t_env;
 
-//test functions
+//main functions
 char	*ft_get_input(void);
+int		count_lines(char *line, int i, int in_word);
+char	*get_next_line_segment(char *line, int *index);
+char	**ft_split_lines_safe(char *line);
+char	*read_quote_line(void);
 
 // main stream functions
 int		has_unclosed_quote(char *str);
-
+char	**ft_split_lines_safe(char *line);
 // heredoc functions
 int		ft_heredoc(t_redir *redir, t_env *env);
 char	*expand_heredoc_line(char *line, t_env *env);

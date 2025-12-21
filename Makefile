@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
+#    By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/21 13:42:53 by xin              ###   ########.fr        #
+#    Updated: 2025/12/21 18:04:10 by meyu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ GET_NEXT_LINE	=	get_next_line.a
 GNL_DIR			=	lib/get_next_line
 
 SRCS 		:=	src/main.c			\
-				src/test.c			\
+				src/main_2.c		\
+				src/main_3.c		\
 				src/lexer.c			\
 				src/lexer_2.c		\
 				src/lexer_3.c		\

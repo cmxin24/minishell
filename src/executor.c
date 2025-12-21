@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 15:25:24 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 17:51:10 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 		ft_free_array(env_array);
 		exit(2);
 	}
-	if (is_builtin(cmd->content[0]))
+	if (is_builtin(cmd->content[0]) && !(ft_strcmp(cmd->content[0], "env") == 0 && cmd->content[1]))
 	{
 		exit_code = exec_builtin(cmd->content, envp);
 		ft_free_array(env_array);
@@ -222,7 +222,8 @@ static void	execute_pipeline(t_cmd *cmd_list, t_env **env)
 	current = cmd_list;
 	fd_in = 0;
 	if (!current->next && current->content && current->content[0]
-		&& is_builtin(current->content[0]))
+		&& is_builtin(current->content[0])
+		&& !(ft_strcmp(current->content[0], "env") == 0 && current->content[1]))
 	{
 		if (ft_builtin_redirect(current, &saved_stdout, &saved_stdin) == 0)
 		{

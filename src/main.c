@@ -6,29 +6,11 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 16:09:41 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/21 18:09:24 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	has_unclosed_quote(char *str)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	quote = 0;
-	while (str[i])
-	{
-		if ((str[i] == '\'' || str[i] == '\"') && quote == 0)
-			quote = str[i];
-		else if (str[i] == quote)
-			quote = 0;
-		i++;
-	}
-	return (quote != 0);
-}
 
 /**
  * @brief process a single line of input
@@ -75,11 +57,36 @@ static void	ft_main_stream(char *line, char **lines, t_env **env_list)
 {
 	if (ft_strchr(line, '\n') && !has_unclosed_quote(line))
 	{
-		lines = ft_split(line, '\n');
+		lines = ft_split_lines_safe(line);
 		ft_process_lines(lines, env_list);
 	}
 	else
 		ft_process_line(line, env_list);
+}
+
+static char	*ft_read_until_quotes_closed(char *line)
+{
+	char	*next_line;
+	char	*temp;
+
+	while (has_unclosed_quote(line))
+	{
+		next_line = read_quote_line();
+		if (!next_line)
+		{
+			ft_putstr_fd(
+				"minishell: unexpected EOF while looking for matching quote\n",
+				2);
+			free(line);
+			return (NULL);
+		}
+		temp = ft_strjoin(line, "\n");
+		free(line);
+		line = ft_strjoin(temp, next_line);
+		free(temp);
+		free(next_line);
+	}
+	return (line);
 }
 
 /**
@@ -96,23 +103,23 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	line = NULL;
 	lines = NULL;
 	ft_init_signals();
 	ft_disable_echo_ctl();
 	env_list = ft_init_env(envp);
 	while (1)
 	{
-		//line = readline("minishell$ ");
 		line = ft_get_input();
 		if (!line)
 			break ;
+		line = ft_read_until_quotes_closed(line);
+		if (!line)
+			continue ;
 		if (*line && isatty(STDIN_FILENO))
 			add_history(line);
 		ft_main_stream(line, lines, &env_list);
 		free(line);
 	}
 	ft_free_env_list(env_list);
-	rl_clear_history();
-	return (g_signal);
+	return (rl_clear_history(), g_signal);
 }
