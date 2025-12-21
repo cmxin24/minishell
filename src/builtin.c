@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 13:41:04 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 15:27:41 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_exit(char **args, t_env *env)
 	int	exit_code;
 
 	exit_code = 0;
-	//printf("exit\n");
+	printf("exit\n");
 	if (args[1])
 	{
 		if (!ft_check_exit(args[1]))
