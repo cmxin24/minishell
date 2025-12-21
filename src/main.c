@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 13:42:16 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 13:57:44 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		//line = readline("minishell$ ");
-		line = ft_handle_3000_tester();
+		line = ft_get_input();
 		if (!line)
 			break ;
 		if (*line && isatty(STDIN_FILENO))

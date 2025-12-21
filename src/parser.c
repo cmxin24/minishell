@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 13:54:08 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 14:24:36 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,12 @@ static t_cmd	*parse_subshell(t_token **tokens)
 	if (*tokens && (*tokens)->type == R_PAREN)
 		*tokens = (*tokens)->next;
 	else
+	{
 		ft_putstr_fd("minishell: syntax error: expected ')'\n", 2);
+		g_signal = 258;
+		ft_free_cmd_list(cmd);
+		return (NULL);
+	}
 	while (*tokens && ((*tokens)->type == REDIRECT_IN
 			|| (*tokens)->type == REDIRECT_OUT
 			|| (*tokens)->type == APPEND || (*tokens)->type == HEREDOC))

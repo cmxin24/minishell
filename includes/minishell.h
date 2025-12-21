@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 13:42:02 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 13:57:34 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ typedef struct s_env
 }	t_env;
 
 //test functions
-char	*ft_handle_3000_tester(void);
+char	*ft_get_input(void);
 
 // main stream functions
 int		has_unclosed_quote(char *str);

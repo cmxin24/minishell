@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 10:00:00 by copilot           #+#    #+#             */
-/*   Updated: 2025/12/21 13:53:51 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 14:03:44 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,6 @@ static int	count_matches(char *pattern)
 	entry = readdir(dir);
 	while (entry != NULL)
 	{
-		if (ft_strcmp(entry->d_name, ".") == 0
-			|| ft_strcmp(entry->d_name, "..") == 0)
-		{
-			entry = readdir(dir);
-			continue ;
-		}
 		if (entry->d_name[0] == '.' && !pattern_starts_with_dot(pattern))
 		{
 			entry = readdir(dir);
@@ -152,12 +146,6 @@ static void	fill_matches(char *pattern, char **matches)
 	entry = readdir(dir);
 	while (entry != NULL)
 	{
-		if (ft_strcmp(entry->d_name, ".") == 0
-			|| ft_strcmp(entry->d_name, "..") == 0)
-		{
-			entry = readdir(dir);
-			continue ;
-		}
 		if (entry->d_name[0] == '.' && !pattern_starts_with_dot(pattern))
 		{
 			entry = readdir(dir);
