@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/20 21:30:49 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 12:10:51 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_env
 
 // main stream functions
 int		has_unclosed_quote(char *str);
+char	*ft_get_input(void);
 
 // heredoc functions
 int		ft_heredoc(t_redir *redir, t_env *env);

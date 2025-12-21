@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/20 20:52:03 by xin               #+#    #+#             */
-/*   Updated: 2025/12/20 21:31:31 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/20 21:38:02 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static int	check_start_token(t_token *t)
 	return (1);
 }
 
-static int	ft_check_token_loop(t_token *temp, int parens)
+static int	ft_check_token_loop(t_token *temp, int *parens)
 {
 	while (temp)
 	{
-		if (temp->type == L_PAREN && !check_lparen(temp, &parens))
+		if (temp->type == L_PAREN && !check_lparen(temp, parens))
 			return (0);
-		else if (temp->type == R_PAREN && !check_rparen(temp, &parens))
+		else if (temp->type == R_PAREN && !check_rparen(temp, parens))
 			return (0);
 		else if ((temp->type == PIPE || temp->type == AND
 				|| temp->type == OR) && !check_operator(temp))
@@ -51,7 +51,7 @@ int	ft_check_token_syntax(t_token *tokens)
 	parens = 0;
 	if (!check_start_token(temp))
 		return (0);
-	if (!ft_check_token_loop(temp, parens))
+	if (!ft_check_token_loop(temp, &parens))
 		return (0);
 	if (parens != 0)
 		return (syntax_error("newline"));

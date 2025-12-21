@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/20 21:28:18 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/21 12:20:39 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,31 +55,31 @@ static void	ft_process_line(char *line, t_env **env_list)
 	ft_free_ast(ast);
 }
 
-static void	ft_process_lines(char **lines, t_env **env_list)
-{
-	int	i;
+// static void	ft_process_lines(char **lines, t_env **env_list)
+// {
+// 	int	i;
 
-	if (!lines)
-		return ;
-	i = 0;
-	while (lines[i])
-	{
-		if (*lines[i] != '\0')
-			ft_process_line(lines[i], env_list);
-		i++;
-	}
-	ft_free_array(lines);
-}
+// 	if (!lines)
+// 		return ;
+// 	i = 0;
+// 	while (lines[i])
+// 	{
+// 		if (*lines[i] != '\0')
+// 			ft_process_line(lines[i], env_list);
+// 		i++;
+// 	}
+// 	ft_free_array(lines);
+// }
 
 static void	ft_main_stream(char *line, char **lines, t_env **env_list)
 {
-	if (ft_strchr(line, '\n') && !has_unclosed_quote(line))
-	{
-		lines = ft_split(line, '\n');
-		ft_process_lines(lines, env_list);
-	}
-	else
-		ft_process_line(line, env_list);
+    char	*newline;
+
+    (void)lines;
+    newline = ft_strchr(line, '\n');
+    if (newline)
+        *newline = '\0';
+    ft_process_line(line, env_list);
 }
 
 /**
@@ -103,7 +103,7 @@ int	main(int argc, char **argv, char **envp)
 	env_list = ft_init_env(envp);
 	while (1)
 	{
-		line = readline("minishell$ ");
+		line = ft_get_input();
 		if (!line)
 			break ;
 		if (*line && isatty(STDIN_FILENO))

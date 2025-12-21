@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 17:25:16 by xin               #+#    #+#             */
-/*   Updated: 2025/12/20 21:28:13 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/20 21:58:59 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ static t_token	*lexer_tokenize(char *line)
 	return (list);
 }
 
+/**
+ * @brief check if the line matches the heredoc delimiter
+ * @note
+ * get_next_line will return a \\n, so we need to trim it before comparison
+ */
 static int	is_heredoc_delimiter(char *line, char *delim)
 {
 	char	*trimmed;
@@ -101,10 +106,8 @@ static void	skip_one_heredoc(t_token *t)
 /**
  * @brief convert the input line into a list of tokens
  * @note
- * 1. skip whitespace
- * 2. identify operators and create corresponding tokens
- * 3. identify words and create corresponding tokens
- * 4. check for syntax errors in the token list
+ * in bash, even if there is a syntax error, the heredoc inputs are still read
+ * so we have to skip the heredoc inputs before freeing the tokens
  */
 t_token	*ft_lexer(char *line)
 {
