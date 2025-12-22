@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 20:52:22 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 11:13:09 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 12:35:52 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,10 @@ static int	heredoc_input_loop(char *delimiter, int fd,
 			break ;
 		if (!line)
 		{
-			ft_putstr_fd("minishell: warning: here-document delimiter `", 2);
+			ft_putstr_fd("minishell: warning: here-document delimited by \
+end-of-file (wanted `", 2);
 			ft_putstr_fd(delimiter, 2);
-			ft_putstr_fd("' not found\n", 2);
+			ft_putstr_fd("')\n", 2);
 			break ;
 		}
 		if (heredoc_should_stop(line, delimiter, env, quotes))
