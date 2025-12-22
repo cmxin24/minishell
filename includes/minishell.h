@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 14:03:21 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 14:28:52 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,14 @@
 
 extern int	g_signal;
 
+/**
+ * @brief Types and Structures
+ * @note
+ * redirect in: <, means input redirection from a file
+ * redirect out: >, means output redirection to a file
+ * append: >>, means appending output to a file
+ * heredoc: << means reading input until a delimiter is found
+ */
 typedef enum e_type_of_token
 {
 	WORD,
