@@ -6,11 +6,29 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 00:29:47 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 00:57:55 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 11:16:17 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+static int	is_valid_unset_key(char *str)
+{
+	int	i;
+
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	i = 1;
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 int	ft_unset(char **args, t_env **env)
 {
@@ -25,6 +43,11 @@ int	ft_unset(char **args, t_env **env)
 		{
 			ft_indentifier_error("unset", args[i]);
 			exit_status = 2;
+		}
+		else if (!is_valid_unset_key(args[i]))
+		{
+			ft_indentifier_error("unset", args[i]);
+			exit_status = 1;
 		}
 		else
 			ft_unset_env(env, args[i]);

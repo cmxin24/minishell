@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 23:46:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 00:48:01 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 11:31:45 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	handle_internal_cmd(t_cmd *cmd, t_env **env, char **env_array)
 	}
 	if (is_builtin(cmd->content[0]))
 	{
+		ft_free_array(env_array);
 		exit(exec_builtin(cmd->content, env, 1));
 	}
 }
@@ -48,7 +49,12 @@ void	child_execute_cmd(t_cmd *cmd, t_env **env, char **env_array)
 	execve(path, cmd->content, env_array);
 	ft_putstr_fd("minishell: ", 2);
 	perror(cmd->content[0]);
+	free(path);
 	ft_free_array(env_array);
+	if (errno == ENOENT)
+		exit(127);
+	if (errno == EACCES || errno == EISDIR)
+		exit(126);
 	exit(1);
 }
 

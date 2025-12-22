@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:55 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 12:10:42 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 11:31:22 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	ft_free_array(char **array)
 	}
 	free(array);
 }
-
-void	ft_free_ast(t_ast *ast);
 
 void	ft_free_cmd_list(t_cmd *cmd)
 {

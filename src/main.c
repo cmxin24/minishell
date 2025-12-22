@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 00:47:06 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 10:57:49 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,23 @@ static void	ft_process_line(char *line, t_env **env_list)
 	ft_free_ast(ast);
 }
 
-static void	ft_process_lines(char **lines, t_env **env_list)
+static void	ft_main_stream(char *line, char **lines, t_env **env_list)
 {
 	int	i;
 
-	if (!lines)
-		return ;
-	i = 0;
-	while (lines[i])
-	{
-		if (*lines[i] != '\0')
-			ft_process_line(lines[i], env_list);
-		i++;
-	}
-	ft_free_array(lines);
-}
-
-static void	ft_main_stream(char *line, char **lines, t_env **env_list)
-{
 	if (ft_strchr(line, '\n') && !has_unclosed_quote(line))
 	{
 		lines = ft_split_lines_safe(line);
-		ft_process_lines(lines, env_list);
+		if (!lines)
+			return ;
+		i = 0;
+		while (lines[i])
+		{
+			if (*lines[i] != '\0')
+				ft_process_line(lines[i], env_list);
+			i++;
+		}
+		ft_free_array(lines);
 	}
 	else
 		ft_process_line(line, env_list);
