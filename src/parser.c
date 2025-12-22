@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 18:35:03 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 11:46:45 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ t_cmd	*ft_new_cmd(void)
 	return (new);
 }
 
+/**
+ * @brief parse tokens into an abstract syntax tree representing
+ * @note
+ * operators have different precedence, AND > OR
+ */
 t_ast	*parse_or(t_token **tokens)
 {
 	t_ast			*left;
