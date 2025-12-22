@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:25:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 23:02:21 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 16:10:33 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,8 @@ int	ft_process_heredoc(t_ast *ast, t_env *env);
 
 static char	*process_heredoc_delimiter(t_redir *redir, t_env *env)
 {
-	char	*expanded;
-	char	*stripped;
-
-	if (redir->heredoc_quoted == 0)
-	{
-		expanded = expand_token_str(redir->file, &env);
-		if (!expanded)
-			return (NULL);
-		stripped = ft_strip_quotes(expanded, 0);
-		free(expanded);
-	}
-	else
-	{
-		stripped = ft_strip_quotes(redir->file, 0);
-	}
-	return (stripped);
+	(void)env;
+	return (ft_strip_quotes(redir->file, 0));
 }
 
 static int	handle_heredoc_redir(t_redir *redir, t_env *env)

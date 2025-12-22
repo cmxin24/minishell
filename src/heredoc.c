@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 20:52:22 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 12:35:52 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 16:00:28 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,10 @@ static char	*heredoc_read_line(void)
 	return (line);
 }
 
-static int	heredoc_should_stop(char *line, char *delimiter,
-	t_env *env, int quotes)
+static int	heredoc_should_stop(char *line, char *delimiter)
 {
-	char	*expanded;
-
-	if (quotes == 0)
-	{
-		expanded = expand_heredoc_line(line, env);
-		if (ft_strcmp(expanded, delimiter) == 0)
-		{
-			free(expanded);
-			return (1);
-		}
-		free(expanded);
-	}
-	else
-	{
-		if (ft_strcmp(line, delimiter) == 0)
-			return (1);
-	}
+	if (ft_strcmp(line, delimiter) == 0)
+		return (1);
 	return (0);
 }
 
@@ -71,6 +55,7 @@ static int	heredoc_input_loop(char *delimiter, int fd,
 	t_env *env, int quotes)
 {
 	char	*line;
+	char	*temp;
 
 	while (1)
 	{
@@ -85,10 +70,16 @@ end-of-file (wanted `", 2);
 			ft_putstr_fd("')\n", 2);
 			break ;
 		}
-		if (heredoc_should_stop(line, delimiter, env, quotes))
+		if (heredoc_should_stop(line, delimiter))
 		{
 			free(line);
 			break ;
+		}
+		if (quotes == 0)
+		{
+			temp = expand_heredoc_line(line, env);
+			free(line);
+			line = temp;
 		}
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);

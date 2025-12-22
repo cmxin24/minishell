@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 00:29:47 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 12:53:39 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 15:47:32 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,7 @@ int	ft_unset(char **args, t_env **env)
 			ft_indentifier_error("unset", args[i]);
 			exit_status = 2;
 		}
-		else if (!is_valid_unset_key(args[i]))
-		{
-			ft_indentifier_error("unset", args[i]);
-			exit_status = 1;
-		}
-		else
+		else if (is_valid_unset_key(args[i]))
 			ft_unset_env(env, args[i]);
 		i++;
 	}

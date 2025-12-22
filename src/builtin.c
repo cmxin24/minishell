@@ -6,18 +6,43 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 12:53:55 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 16:15:08 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+static long long	ft_atoll(const char *str)
+{
+	long long	result;
+	int			sign;
+	int			i;
+
+	result = 0;
+	sign = 1;
+	i = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (result * sign);
+}
+
 int	ft_exit(char **args, t_env *env, int print)
 {
-	int	exit_code;
+	long long	exit_code;
 
 	exit_code = 0;
-	if (print)
+	if (print && isatty(STDIN_FILENO))
 		printf("exit\n");
 	if (args[1])
 	{
@@ -33,12 +58,12 @@ int	ft_exit(char **args, t_env *env, int print)
 			ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 			return (1);
 		}
-		exit_code = ft_atoi(args[1]) % 256;
+		exit_code = ft_atoll(args[1]) % 256;
 		ft_free_env_list(env);
-		exit(exit_code);
+		exit((int)exit_code);
 	}
 	ft_free_env_list(env);
-	return (exit(exit_code), 0);
+	return (exit((int)exit_code), 0);
 }
 
 int	ft_cd(char **args, t_env **env)
