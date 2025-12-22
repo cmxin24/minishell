@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_5.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 23:46:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 11:31:45 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 13:03:08 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static void	handle_internal_cmd(t_cmd *cmd, t_env **env, char **env_array)
 		ft_free_array(env_array);
 		exit(0);
 	}
-	if (is_builtin(cmd->content[0]))
+	if (is_builtin(cmd->content[0]) && !(ft_strcmp(cmd->content[0], "env")
+			== 0 && cmd->content[1]))
 	{
 		ft_free_array(env_array);
 		exit(exec_builtin(cmd->content, env, 1));

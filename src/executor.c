@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 00:49:33 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 12:57:29 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static int	execute_single_builtin(t_cmd *cmd, t_env **env, int is_subshell)
 	if (!cmd->content || !cmd->content[0])
 		return (0);
 	if (!is_builtin(cmd->content[0]))
+		return (0);
+	if (ft_strcmp(cmd->content[0], "env") == 0 && cmd->content[1])
 		return (0);
 	if (ft_builtin_redirect(cmd, &saved_stdout, &saved_stdin) == 0)
 	{

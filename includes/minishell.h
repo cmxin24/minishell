@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 00:49:48 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 12:40:52 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,16 +118,14 @@ typedef struct s_strip_ctx
 	char	*dst;
 }	t_strip_ctx;
 
-//main functions
+// main stream functions
 char	*ft_get_input(void);
 int		count_lines(char *line, int i, int in_word);
 char	*get_next_line_segment(char *line, int *index);
 char	**ft_split_lines_safe(char *line);
 char	*read_quote_line(void);
-
-// main stream functions
 int		has_unclosed_quote(char *str);
-char	**ft_split_lines_safe(char *line);
+
 // heredoc functions
 int		ft_heredoc(t_redir *redir, t_env *env);
 char	*expand_heredoc_line(char *line, t_env *env);
