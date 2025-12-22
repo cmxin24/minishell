@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/06 18:38:41 by xin               #+#    #+#             */
-/*   Updated: 2025/12/20 21:28:21 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 16:40:11 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	syntax_error(char *token)
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
-	g_signal = 258;
+	g_signal = 2;
 	return (0);
 }
 

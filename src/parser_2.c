@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 19:04:08 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 18:27:45 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 16:35:47 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	set_redir_info(t_redir *redir, t_type_of_token type, t_token *token)
 	}
 }
 
-void	ft_redirection(t_cmd *cmd, t_token **token)
+int	ft_redirection(t_cmd *cmd, t_token **token)
 {
 	t_type_of_token	type;
 	t_redir			*new_redir;
@@ -85,10 +85,10 @@ void	ft_redirection(t_cmd *cmd, t_token **token)
 	type = (*token)->type;
 	*token = (*token)->next;
 	if (!validate_redir_token(*token))
-		return ;
+		return (0);
 	new_redir = create_redir();
 	if (!new_redir)
-		return ;
+		return (0);
 	set_redir_info(new_redir, type, *token);
 	if (!cmd->redirs)
 		cmd->redirs = new_redir;
@@ -99,4 +99,5 @@ void	ft_redirection(t_cmd *cmd, t_token **token)
 			tmp = tmp->next;
 		tmp->next = new_redir;
 	}
+	return (1);
 }

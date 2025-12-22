@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 14:06:45 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 16:40:11 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ static t_cmd	*parse_single_command(t_token **temp, int i)
 			cmd->content[i++] = ft_strdup((*temp)->content);
 		else if ((*temp)->type == REDIRECT_IN || (*temp)->type == REDIRECT_OUT
 			|| (*temp)->type == APPEND || (*temp)->type == HEREDOC)
-			ft_redirection(cmd, temp);
+		{
+			if (!ft_redirection(cmd, temp))
+				return (ft_free_cmd_list(cmd), NULL);
+		}
 		if (*temp)
 			*temp = (*temp)->next;
 	}
@@ -93,7 +96,7 @@ static int	handle_pipe_token(t_token **tokens, t_cmd *list)
 	{
 		ft_putstr_fd(
 			"minishell: syntax error near unexpected token `|'\n", 2);
-		g_signal = 258;
+		g_signal = 2;
 		ft_free_cmd_list(list);
 		return (0);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 18:29:35 by meyu              #+#    #+#             */
-/*   Updated: 2025/12/22 14:03:20 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 16:40:16 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ t_cmd	*parse_subshell(t_token **tokens)
 	else
 	{
 		ft_putstr_fd("minishell: syntax error: expected ')'\n", 2);
-		g_signal = 258;
-		ft_free_cmd_list(cmd);
-		return (NULL);
+		g_signal = 2;
+		return (ft_free_cmd_list(cmd), NULL);
 	}
 	while (*tokens && ((*tokens)->type == REDIRECT_IN
 			|| (*tokens)->type == REDIRECT_OUT
 			|| (*tokens)->type == APPEND || (*tokens)->type == HEREDOC))
 	{
-		ft_redirection(cmd, tokens);
+		if (!ft_redirection(cmd, tokens))
+			return (ft_free_cmd_list(cmd), NULL);
 		if (*tokens)
 			*tokens = (*tokens)->next;
 	}

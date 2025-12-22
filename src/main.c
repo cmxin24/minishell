@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 14:03:22 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 16:40:22 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ static void	ft_main_stream(char *line, char **lines, t_env **env_list)
 		{
 			if (*lines[i] != '\0')
 				ft_process_line(lines[i], env_list);
+			if (!isatty(STDIN_FILENO) && g_signal == 2)
+				break ;
 			i++;
 		}
 		ft_free_array(lines);
@@ -114,6 +116,8 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 		ft_main_stream(line, lines, &env_list);
 		free(line);
+		if (!isatty(STDIN_FILENO) && g_signal == 2)
+			break ;
 	}
 	ft_free_env_list(env_list);
 	return (rl_clear_history(), g_signal);
