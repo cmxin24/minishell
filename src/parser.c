@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 11:46:45 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 13:51:11 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,11 @@ t_cmd	*ft_parse_pipeline(t_token **tokens)
 			*tokens = (*tokens)->next;
 			if (!*tokens || (*tokens)->type == PIPE || (*tokens)->type == AND
 				|| (*tokens)->type == OR || (*tokens)->type == R_PAREN)
-				break ;
+			{
+				ft_putstr_fd("minishell: syntax error near \
+	unexpected token `|'\n", 2);
+				return (g_signal = 258, ft_free_cmd_list(list), NULL);
+			}
 			continue ;
 		}
 		new_node = parse_single_command(tokens, 0);
