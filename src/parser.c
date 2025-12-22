@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 13:51:11 by xin              ###   ########.fr       */
+/*   Updated: 2025/12/22 14:06:45 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ t_cmd	*ft_new_cmd(void)
 
 /**
  * @brief parse tokens into an abstract syntax tree representing
- * @note
- * operators have different precedence, AND > OR
  */
-t_ast	*parse_or(t_token **tokens)
+t_ast	*ft_parser(t_token **tokens)
 {
 	t_ast			*left;
 	t_ast			*right;
@@ -85,6 +83,23 @@ static t_cmd	*parse_single_command(t_token **temp, int i)
 	return (cmd->content[i] = NULL, cmd);
 }
 
+static int	handle_pipe_token(t_token **tokens, t_cmd *list)
+{
+	*tokens = (*tokens)->next;
+	if (!*tokens || (*tokens)->type == PIPE
+		|| (*tokens)->type == AND
+		|| (*tokens)->type == OR
+		|| (*tokens)->type == R_PAREN)
+	{
+		ft_putstr_fd(
+			"minishell: syntax error near unexpected token `|'\n", 2);
+		g_signal = 258;
+		ft_free_cmd_list(list);
+		return (0);
+	}
+	return (1);
+}
+
 t_cmd	*ft_parse_pipeline(t_token **tokens)
 {
 	t_cmd	*list;
@@ -93,19 +108,14 @@ t_cmd	*ft_parse_pipeline(t_token **tokens)
 
 	list = NULL;
 	current = NULL;
-	while (*tokens && (*tokens)->type != AND && (*tokens)->type != OR
+	while (*tokens && (*tokens)->type != AND
+		&& (*tokens)->type != OR
 		&& (*tokens)->type != R_PAREN)
 	{
 		if ((*tokens)->type == PIPE)
 		{
-			*tokens = (*tokens)->next;
-			if (!*tokens || (*tokens)->type == PIPE || (*tokens)->type == AND
-				|| (*tokens)->type == OR || (*tokens)->type == R_PAREN)
-			{
-				ft_putstr_fd("minishell: syntax error near \
-	unexpected token `|'\n", 2);
-				return (g_signal = 258, ft_free_cmd_list(list), NULL);
-			}
+			if (!handle_pipe_token(tokens, list))
+				return (NULL);
 			continue ;
 		}
 		new_node = parse_single_command(tokens, 0);
@@ -114,9 +124,4 @@ t_cmd	*ft_parse_pipeline(t_token **tokens)
 		ft_add_cmd(&list, &current, new_node);
 	}
 	return (list);
-}
-
-t_ast	*ft_parser(t_token *tokens)
-{
-	return (parse_or(&tokens));
 }

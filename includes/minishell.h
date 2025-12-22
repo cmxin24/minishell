@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 12:40:52 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 14:03:21 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,8 +167,7 @@ void	ft_indentifier_error(char *cmd, char *arg);
 int		ft_check_exit(char *str);
 
 // parser functions
-t_ast	*ft_parser(t_token *tokens);
-t_ast	*parse_or(t_token **tokens);
+t_ast	*ft_parser(t_token **tokens);
 void	ft_redirection(t_cmd *cmd, t_token **token);
 t_cmd	*parse_subshell(t_token **tokens);
 t_cmd	*ft_new_cmd(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 18:29:35 by meyu              #+#    #+#             */
-/*   Updated: 2025/12/21 18:34:04 by meyu             ###   ########.fr       */
+/*   Updated: 2025/12/22 14:03:20 by xin              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_cmd	*parse_subshell(t_token **tokens)
 	if (!cmd)
 		return (NULL);
 	*tokens = (*tokens)->next;
-	cmd->subshell = parse_or(tokens);
+	cmd->subshell = ft_parser(tokens);
 	if (*tokens && (*tokens)->type == R_PAREN)
 		*tokens = (*tokens)->next;
 	else
