@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 16:40:22 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/05 18:11:28 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ static void	ft_process_line(char *line, t_env **env_list)
 	ft_free_ast(ast);
 }
 
-static void	ft_main_stream(char *line, char **lines, t_env **env_list)
+static void	ft_main_stream(char *line, t_env **env_list)
 {
-	int	i;
+	int		i;
+	char	**lines;
 
+	lines = NULL;
 	if (ft_strchr(line, '\n') && !has_unclosed_quote(line))
 	{
 		lines = ft_split_lines_safe(line);
@@ -95,12 +97,10 @@ static char	*ft_read_until_quotes_closed(char *line)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*line;
-	char	**lines;
 	t_env	*env_list;
 
 	(void)argc;
 	(void)argv;
-	lines = NULL;
 	ft_init_signals();
 	ft_disable_echo_ctl();
 	env_list = ft_init_env(envp);
@@ -114,7 +114,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (*line && isatty(STDIN_FILENO))
 			add_history(line);
-		ft_main_stream(line, lines, &env_list);
+		ft_main_stream(line, &env_list);
 		free(line);
 		if (!isatty(STDIN_FILENO) && g_signal == 2)
 			break ;
