@@ -3,86 +3,123 @@
 /*                                                        :::      ::::::::   */
 /*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: nschneid <nschneid@student.42heilbronn.de  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/07 14:19:10 by xin               #+#    #+#             */
-/*   Updated: 2025/12/19 18:31:05 by xin              ###   ########.fr       */
+/*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
+/*   Updated: 2026/01/05 21:02:38 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_set_env_value(t_env **env, char *key, char *value)
+char	*ft_get_env_value(t_env *head, char *key)
 {
-	t_env	*temp;
-	t_env	*new;
-
-	temp = *env;
-	while (temp)
+	while(head)
 	{
-		if (ft_strcmp(temp->key, key) == 0)
+		if (ft_strcmp(head->key, key) == 0)
+			return (head->value);
+		head = head->next;
+	}
+	return (NULL);
+}
+
+void	ft_set_env_value(t_env **head, char *key, char *value)
+{
+	t_env	*tmp;
+
+	tmp = *head;
+	while(tmp)
+	{
+		if (ft_strcmp(tmp->key, key) == 0)
 		{
-			free(temp->value);
-			temp->value = ft_strdup(value);
+			free(tmp->value);
+			tmp->value = value;
 			return ;
 		}
-		temp = temp->next;
+		tmp = tmp->next;
 	}
-	new = malloc(sizeof(t_env));
-	if (!new)
+	tmp = (t_env *)malloc(sizeof(t_env));
+	if (!tmp)
 		return ;
-	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
-	new->next = *env;
-	*env = new;
+	tmp->key = ft_strdup(key);
+	tmp->value = ft_strdup(value);
+	tmp->next = NULL;
+	*head = tmp;
+	return ;
 }
 
-void	ft_append_env_value(t_env **env, char *key, char *value)
+void	ft_append_env_value(t_env **head, char *key, char *value)
 {
-	t_env	*temp;
-	t_env	*new;
-	char	*new_val;
+	t_env	*tmp;
+	char	*str;
 
-	temp = *env;
-	while (temp)
+	tmp = *head;
+	while(tmp)
 	{
-		if (ft_strcmp(temp->key, key) == 0)
+		if (ft_strcmp(tmp->key, key) == 0)
 		{
-			new_val = ft_strjoin(temp->value, value);
-			free(temp->value);
-			temp->value = new_val;
+			str = ft_strjoin(tmp->value, value);
+			free(tmp->value);
+			tmp->value = str;
 			return ;
 		}
-		temp = temp->next;
+		tmp = tmp->next;
 	}
-	new = malloc(sizeof(t_env));
-	new->key = ft_strdup(key);
-	new->value = ft_strdup(value);
-	new->next = *env;
-	*env = new;
+	tmp = (t_env *)malloc(sizeof(t_env));
+	if (!tmp)
+		return ;
+	tmp->key = ft_strdup(key);
+	tmp->value = ft_strdup(value);
+	tmp->next = NULL;
+	*head = tmp;
+	return ;
 }
 
-void	ft_unset_env(t_env **env, char *key)
+void	ft_unset_env(t_env **head, char *key)
 {
-	t_env	*current;
+	t_env	*curr;
 	t_env	*prev;
 
-	current = *env;
+	curr = *head;
 	prev = NULL;
-	while (current)
+	while (curr)
 	{
-		if (ft_strcmp(current->key, key) == 0)
+		if (ft_strcmp(curr->key, key) == 0)
 		{
-			if (prev)
-				prev->next = current->next;
-			else
-				*env = current->next;
-			free(current->key);
-			free(current->value);
-			free(current);
+			if (!prev)
+			{
+				*head = curr->next;
+				return ;
+			}
+			prev->next = curr->next;
+			free(curr->key);
+			free(curr->value);
+			free(curr);
 			return ;
 		}
-		prev = current;
-		current = current->next;
+		prev = curr;
+		curr = curr->next;
 	}
+	return ;
+}
+
+char	**ft_env_list_to_array(t_env *head)
+{
+	size_t	count;
+	char	**arr;
+
+	count = get_env_count(head);
+	arr = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!arr)
+		return (NULL);
+	arr[count] = NULL;
+	count = 0;
+	while(head)
+	{
+		arr[count] = env_to_str(head);
+		printf("%s\n", arr[count]);
+		count++;
+		head = head->next;
+	}
+	return (arr);
 }
