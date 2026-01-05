@@ -6,7 +6,7 @@
 /*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 21:28:10 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 00:05:14 by xin              ###   ########.fr       */
+/*   Updated: 2026/01/05 18:06:09 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,29 @@ int	cd_get_target_path(char **args, t_env **env, char **path, int *print_path)
 	}
 	else
 		*path = args[1];
+	return (0);
+}
+
+int	ft_echo(char **args)
+{
+	int	i;
+	int	newline;
+
+	i = 1;
+	newline = 1;
+	while (args[i] && echo_n_flag(args[i]))
+	{
+		newline = 0;
+		i++;
+	}
+	while (args[i])
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1])
+			write(1, " ", 1);
+		i++;
+	}
+	if (newline)
+		write(1, "\n", 1);
 	return (0);
 }

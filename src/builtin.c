@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 16:15:08 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/05 18:06:41 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,28 +126,4 @@ int	ft_pwd(void)
 		perror("pwd");
 		return (1);
 	}
-}
-
-int	ft_echo(char **args)
-{
-	int	i;
-	int	newline;
-
-	i = 1;
-	newline = 1;
-	while (args[i] && echo_n_flag(args[i]))
-	{
-		newline = 0;
-		i++;
-	}
-	while (args[i])
-	{
-		ft_putstr_fd(args[i], 1);
-		if (args[i + 1])
-			write(1, " ", 1);
-		i++;
-	}
-	if (newline)
-		write(1, "\n", 1);
-	return (0);
 }
