@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 23:46:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 13:03:08 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/05 21:03:40 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	char	**env_array;
 
 	init_child_signals();
-	env_array = ft_env_list_to_array(*envp, 0);
+	env_array = ft_env_list_to_array(*envp);
 	if (fd_in != 0)
 	{
 		dup2(fd_in, STDIN_FILENO);
