@@ -6,7 +6,7 @@
 #    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2025/12/22 00:36:01 by xin              ###   ########.fr        #
+#    Updated: 2026/01/05 21:07:40 by nschneid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ else ifeq ($(UNAME), Darwin)
 	RL_LIB = -L$(RL_PATH)/lib -lreadline
 endif
 
-CFLAGS		= 	-Wall -Werror -Wextra $(RL_INC)
+CFLAGS		= 	$(RL_INC) -Wall -Werror -Wextra
 
 LIBFT		=	libft.a
 LIB_DIR		=	lib/libft
@@ -57,6 +57,7 @@ SRCS 		:=	src/main.c			\
 				src/expander_7.c	\
 				src/env.c			\
 				src/env_2.c			\
+				src/env_utils.c			\
 				src/builtin.c		\
 				src/builtin_2.c		\
 				src/builtin_3.c		\
