@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 16:35:20 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/05 21:04:25 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,9 @@ char	*ft_get_env_value(t_env *env_list, char *key);
 void	ft_set_env_value(t_env **env_list, char *key, char *value);
 void	ft_append_env_value(t_env **env, char *key, char *value);
 void	ft_unset_env(t_env **env, char *key);
-char	**ft_env_list_to_array(t_env *env_list, int i);
+char	**ft_env_list_to_array(t_env *env_list);
+size_t	get_env_count(t_env *head);
+char	*env_to_str(t_env *node);
 
 // built-in functions
 int		ft_pwd(void);
