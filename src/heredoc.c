@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 20:52:22 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 16:51:48 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/13 14:20:18 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,9 @@ static int	heredoc_input_loop(char *delimiter, int fd,
 		if (g_signal == 130)
 			break ;
 		if (!line)
-		{
-			ft_putstr_fd("minishell: warning: here-document delimited b\
-				y end-of-file (wanted `", 2);
-			ft_putstr_fd(delimiter, 2);
-			ft_putstr_fd("')\n", 2);
-			break ;
-		}
+			return (prnt_heredoc_warn(delimiter), 0);
 		if (heredoc_should_stop(line, delimiter))
-		{
-			free(line);
-			break ;
-		}
+			return (free(line), 0);
 		if (quotes == 0)
 		{
 			temp = expand_heredoc_line(line, env);

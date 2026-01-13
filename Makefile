@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xin <xin@student.42.fr>                    +#+  +:+       +#+         #
+#    By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2026/01/05 21:07:40 by nschneid         ###   ########.fr        #
+#    Updated: 2026/01/13 15:27:53 by nschneid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,7 @@ SRCS 		:=	src/main.c			\
 				src/signal.c		\
 				src/heredoc.c		\
 				src/heredoc_2.c		\
+				src/heredoc_3.c		\
 				src/free.c			\
 				src/wildcard.c		\
 				src/wildcard_2.c
