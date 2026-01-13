@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nschneid <nschneid@student.42heilbronn.de  +#+  +:+       +#+        */
+/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/05 21:02:38 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/13 15:29:59 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ char	**ft_env_list_to_array(t_env *head)
 	while(head)
 	{
 		arr[count] = env_to_str(head);
-		printf("%s\n", arr[count]);
 		count++;
 		head = head->next;
 	}
