@@ -6,7 +6,7 @@
 /*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/13 15:29:59 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/13 15:36:55 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_get_env_value(t_env *head, char *key)
 {
-	while(head)
+	while (head)
 	{
 		if (ft_strcmp(head->key, key) == 0)
 			return (head->value);
@@ -28,7 +28,7 @@ void	ft_set_env_value(t_env **head, char *key, char *value)
 	t_env	*tmp;
 
 	tmp = *head;
-	while(tmp)
+	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
@@ -54,7 +54,7 @@ void	ft_append_env_value(t_env **head, char *key, char *value)
 	char	*str;
 
 	tmp = *head;
-	while(tmp)
+	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
@@ -114,7 +114,7 @@ char	**ft_env_list_to_array(t_env *head)
 		return (NULL);
 	arr[count] = NULL;
 	count = 0;
-	while(head)
+	while (head)
 	{
 		arr[count] = env_to_str(head);
 		count++;

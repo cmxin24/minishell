@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nschneid <nschneid@student.42heilbronn.de  +#+  +:+       +#+        */
+/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 20:55:36 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/05 21:01:38 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/13 15:37:02 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	get_env_count(t_env *head)
 	size_t	count;
 
 	count = 0;
-	while(head)
+	while (head)
 	{
 		count++;
 		head = head->next;

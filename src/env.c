@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nschneid <nschneid@student.42heilbronn.de  +#+  +:+       +#+        */
+/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/05 20:17:26 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/13 15:36:13 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stddef.h>
 
 static t_env	*env_create_node(char *str);
-static void	env_add_node(t_env **head, t_env *node);
+static void		env_add_node(t_env **head, t_env *node);
 
 t_env	*ft_init_env(char **envp)
 {
@@ -41,14 +41,14 @@ static void	env_add_node(t_env **head, t_env *node)
 		return ;
 	}
 	tmp = *head;
-	while(tmp->next)
+	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = node;
 }
 
 static t_env	*env_create_node(char *str)
 {
-	t_env	*node;
+	t_env		*node;
 	ptrdiff_t	equals_pos;
 
 	node = (t_env *)malloc(sizeof(t_env));
@@ -61,5 +61,5 @@ static t_env	*env_create_node(char *str)
 	str += equals_pos + 1;
 	node->value = ft_strdup(str);
 	node->next = NULL;
-	return node;
+	return (node);
 }
