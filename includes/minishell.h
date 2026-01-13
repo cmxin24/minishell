@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 16:35:20 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/13 14:17:41 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ int		has_unclosed_quote(char *str);
 // heredoc functions
 int		ft_heredoc(t_redir *redir, t_env *env);
 char	*expand_heredoc_line(char *line, t_env *env);
+void	prnt_heredoc_warn(char *delimiter);
 
 // signal functions
 void	ft_disable_echo_ctl(void);

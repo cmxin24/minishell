@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   heredoc_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/22 16:04:27 by meyu              #+#    #+#             */
-/*   Updated: 2025/12/22 16:05:33 by meyu             ###   ########.fr       */
+/*   Created: 2026/01/13 14:13:18 by nschneid          #+#    #+#             */
+/*   Updated: 2026/01/13 14:23:38 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/minishell.h"
 
-int	main(void)
+void	prnt_heredoc_warn(char *delimiter)
 {
-	char	*a;
-
-	a = "asdfasdfasfasdfsdfasdf\
-		dafdsadfasdfsadf";
+	ft_putstr_fd("minishell: warning: here-document delimited"
+		"by end-of-file (wanted `", 2);
+	ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
 }
