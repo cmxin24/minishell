@@ -6,7 +6,7 @@
 #    By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2026/01/13 15:27:53 by nschneid         ###   ########.fr        #
+#    Updated: 2026/01/14 13:01:50 by nschneid         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ SRCS 		:=	src/main.c			\
 				src/expander_7.c	\
 				src/env.c			\
 				src/env_2.c			\
-				src/env_utils.c			\
+				src/env_utils.c		\
 				src/builtin.c		\
 				src/builtin_2.c		\
 				src/builtin_3.c		\
