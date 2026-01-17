@@ -6,7 +6,7 @@
 /*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/17 15:47:39 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 17:03:15 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_set_env_value(t_env **head, char *key, char *value)
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
 			free(tmp->value);
-			tmp->value = value;
+			tmp->value = ft_strdup(value);
 			return ;
 		}
 		tmp = tmp->next;
