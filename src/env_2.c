@@ -6,12 +6,11 @@
 /*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/17 17:03:15 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 17:28:50 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <stdio.h>
 
 char	*ft_get_env_value(t_env *head, char *key)
 {
