@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 16:40:22 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 13:03:11 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,12 @@ static char	*ft_read_until_quotes_closed(char *line)
 		if (!next_line)
 		{
 			ft_putstr_fd(
-				"minishell: unexpected EOF while looking for matching quote\n",
+				"minishell: unexpected EOF while looking for matching `",
 				2);
+			ft_putchar_fd(has_unclosed_quote(line), 2);
+			ft_putstr_fd("'\n", 2);
+			ft_putstr_fd("minishell: syntax error: unexpected end of file\n", 2);
+			g_signal = 2;
 			free(line);
 			return (NULL);
 		}
