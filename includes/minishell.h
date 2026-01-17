@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 15:37:53 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:29:17 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ int		has_unclosed_quote(char *str);
 // heredoc functions
 int		ft_heredoc(t_redir *redir, t_env *env);
 char	*expand_heredoc_line(char *line, t_env *env);
-void	prnt_heredoc_warn(char *delimiter);
 
 // signal functions
 void	ft_disable_echo_ctl(void);
@@ -156,10 +155,7 @@ char	*ft_get_env_value(t_env *env_list, char *key);
 void	ft_set_env_value(t_env **env_list, char *key, char *value);
 void	ft_append_env_value(t_env **env, char *key, char *value);
 void	ft_unset_env(t_env **env, char *key);
-char	**ft_env_list_to_array(t_env *env_list);
-size_t	get_env_count(t_env *head);
-char	*env_to_str(t_env *node);
-void	print_env(t_env *head);
+char	**ft_env_list_to_array(t_env *env_list, int i);
 
 // built-in functions
 int		ft_pwd(void);
@@ -204,7 +200,7 @@ int		ft_len_without_quotes(char *str);
 char	*ft_strip_quotes(char *str, int len);
 char	*expand_token_str(char *str, t_env **env);
 void	ft_expander(t_ast *ast, t_env **env);
-void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env);
+int		ft_expand_pipeline(t_cmd *cmd_list, t_env **env);
 char	**list_to_array(t_list *list);
 void	free_list_nodes(t_list *list);
 char	**ft_split_unquoted(char *str);

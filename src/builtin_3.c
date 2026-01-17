@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 21:28:10 by xin               #+#    #+#             */
-/*   Updated: 2026/01/05 18:06:09 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:22:03 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,28 @@ int	ft_is_valid_identifier(char *str)
 	return (1);
 }
 
-void	ft_indentifier_error(char *cmd, char *arg)
+static int	is_overflow(char *str)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": `", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
+	int		len;
+	char	*max;
+	int		neg;
+
+	neg = 0;
+	if (*str == '-' || *str == '+')
+		if (*str++ == '-')
+			neg = 1;
+	while (*str == '0' && *(str + 1))
+		str++;
+	len = ft_strlen(str);
+	if (len > 19)
+		return (1);
+	if (len < 19)
+		return (0);
+	if (neg)
+		max = "9223372036854775808";
+	else
+		max = "9223372036854775807";
+	return (ft_strcmp(str, max) > 0);
 }
 
 int	ft_check_exit(char *str)
@@ -58,56 +73,52 @@ int	ft_check_exit(char *str)
 			return (0);
 		i++;
 	}
+	if (is_overflow(str))
+		return (0);
 	return (1);
+}
+
+int	cd_get_arg_index(char **args, int *idx)
+{
+	*idx = 1;
+	if (args[1] && ft_strcmp(args[1], "--") == 0)
+	{
+		(*idx)++;
+		if (args[*idx] && args[*idx + 1])
+			return (ft_putstr_fd(
+					"minishell: cd: too many arguments\n", 2), 1);
+	}
+	else if (args[1] && args[2])
+		return (ft_putstr_fd(
+				"minishell: cd: too many arguments\n", 2), 1);
+	return (0);
 }
 
 int	cd_get_target_path(char **args, t_env **env, char **path, int *print_path)
 {
 	char	*tmp;
+	int		idx;
 
 	tmp = NULL;
 	*print_path = 0;
-	if (args[1] && args[2])
-		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
-	if (args[1] == NULL)
+	if (cd_get_arg_index(args, &idx))
+		return (1);
+	if (args[idx] == NULL)
 	{
 		*path = ft_get_env_value(*env, "HOME");
 		if (*path == NULL || **path == '\0')
 			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
 	}
-	else if (ft_strcmp(args[1], "-") == 0)
+	else if (idx == 1 && ft_strcmp(args[idx], "-") == 0)
 	{
 		tmp = ft_get_env_value(*env, "OLDPWD");
 		if (tmp == NULL)
-			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 1);
+			return (ft_putstr_fd(
+					"minishell: cd: OLDPWD not set\n", 2), 1);
 		*path = ft_strdup(tmp);
 		*print_path = 1;
 	}
 	else
-		*path = args[1];
-	return (0);
-}
-
-int	ft_echo(char **args)
-{
-	int	i;
-	int	newline;
-
-	i = 1;
-	newline = 1;
-	while (args[i] && echo_n_flag(args[i]))
-	{
-		newline = 0;
-		i++;
-	}
-	while (args[i])
-	{
-		ft_putstr_fd(args[i], 1);
-		if (args[i + 1])
-			write(1, " ", 1);
-		i++;
-	}
-	if (newline)
-		write(1, "\n", 1);
+		*path = args[idx];
 	return (0);
 }

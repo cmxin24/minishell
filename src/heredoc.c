@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 20:52:22 by xin               #+#    #+#             */
-/*   Updated: 2026/01/13 14:20:18 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:10:01 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,24 @@ static char	*heredoc_read_line(void)
 	return (line);
 }
 
-static int	heredoc_should_stop(char *line, char *delimiter)
+static void	heredoc_process_line(char *line, int fd, t_env *env, int quotes)
 {
-	if (ft_strcmp(line, delimiter) == 0)
-		return (1);
-	return (0);
+	char	*temp;
+
+	if (quotes == 0)
+	{
+		temp = expand_heredoc_line(line, env);
+		free(line);
+		line = temp;
+	}
+	ft_putstr_fd(line, fd);
+	ft_putstr_fd("\n", fd);
+	free(line);
 }
 
-static int	heredoc_input_loop(char *delimiter, int fd,
-	t_env *env, int quotes)
+static int	heredoc_input_loop(char *delimiter, int fd, t_env *env, int quotes)
 {
 	char	*line;
-	char	*temp;
 
 	while (1)
 	{
@@ -63,18 +69,19 @@ static int	heredoc_input_loop(char *delimiter, int fd,
 		if (g_signal == 130)
 			break ;
 		if (!line)
-			return (prnt_heredoc_warn(delimiter), 0);
-		if (heredoc_should_stop(line, delimiter))
-			return (free(line), 0);
-		if (quotes == 0)
 		{
-			temp = expand_heredoc_line(line, env);
-			free(line);
-			line = temp;
+			ft_putstr_fd("minishell: warning: here-document delimited b\
+				y end-of-file (wanted `", 2);
+			ft_putstr_fd(delimiter, 2);
+			ft_putstr_fd("')\n", 2);
+			break ;
 		}
-		ft_putstr_fd(line, fd);
-		ft_putstr_fd("\n", fd);
-		free(line);
+		if (ft_strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break ;
+		}
+		heredoc_process_line(line, fd, env, quotes);
 	}
 	return (0);
 }

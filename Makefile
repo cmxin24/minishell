@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+         #
+#    By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2026/01/14 13:01:50 by nschneid         ###   ########.fr        #
+#    Updated: 2026/01/17 13:57:49 by meyu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ else ifeq ($(UNAME), Darwin)
 	RL_LIB = -L$(RL_PATH)/lib -lreadline
 endif
 
-CFLAGS		= 	$(RL_INC) -Wall -Werror -Wextra
+CFLAGS		= 	-Wall -Werror -Wextra $(RL_INC)
 
 LIBFT		=	libft.a
 LIB_DIR		=	lib/libft
@@ -57,15 +57,14 @@ SRCS 		:=	src/main.c			\
 				src/expander_7.c	\
 				src/env.c			\
 				src/env_2.c			\
-				src/env_utils.c		\
 				src/builtin.c		\
 				src/builtin_2.c		\
 				src/builtin_3.c		\
 				src/builtin_4.c		\
+				src/builtin_5.c		\
 				src/signal.c		\
 				src/heredoc.c		\
 				src/heredoc_2.c		\
-				src/heredoc_3.c		\
 				src/free.c			\
 				src/wildcard.c		\
 				src/wildcard_2.c

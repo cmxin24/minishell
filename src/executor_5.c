@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 23:46:06 by xin               #+#    #+#             */
-/*   Updated: 2026/01/05 21:03:40 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 14:40:24 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static void	handle_internal_cmd(t_cmd *cmd, t_env **env, char **env_array)
 void	child_execute_cmd(t_cmd *cmd, t_env **env, char **env_array)
 {
 	char	*path;
+	int		err_code;
 
 	handle_internal_cmd(cmd, env, env_array);
 	path = find_command_path(cmd->content[0], env_array, 0, NULL);
@@ -48,13 +49,15 @@ void	child_execute_cmd(t_cmd *cmd, t_env **env, char **env_array)
 		exit(127);
 	}
 	execve(path, cmd->content, env_array);
+	err_code = errno;
 	ft_putstr_fd("minishell: ", 2);
+	errno = err_code;
 	perror(cmd->content[0]);
 	free(path);
 	ft_free_array(env_array);
-	if (errno == ENOENT)
+	if (err_code == ENOENT)
 		exit(127);
-	if (errno == EACCES || errno == EISDIR)
+	if (err_code == EACCES || err_code == EISDIR)
 		exit(126);
 	exit(1);
 }
@@ -101,7 +104,7 @@ void	child_process(t_cmd *cmd, t_env **envp, int *pipe_fd, int fd_in)
 	char	**env_array;
 
 	init_child_signals();
-	env_array = ft_env_list_to_array(*envp);
+	env_array = ft_env_list_to_array(*envp, 0);
 	if (fd_in != 0)
 	{
 		dup2(fd_in, STDIN_FILENO);

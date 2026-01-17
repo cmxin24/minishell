@@ -3,77 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   expander_4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 22:24:46 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 23:00:05 by xin              ###   ########.fr       */
+/*   Updated: 2026/01/17 15:33:31 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_list_nodes(t_list *list)
+static int	handle_wildcard(t_redir *redir)
 {
-	t_list	*tmp;
-
-	while (list)
-	{
-		tmp = list;
-		list = list->next;
-		free(tmp);
-	}
-}
-
-char	**list_to_array(t_list *list)
-{
-	int		len;
-	char	**array;
-	int		i;
-	t_list	*tmp;
-
-	len = ft_lstsize(list);
-	array = malloc(sizeof(char *) * (len + 1));
-	if (!array)
-		return (NULL);
-	i = 0;
-	tmp = list;
-	while (tmp)
-	{
-		array[i++] = tmp->content;
-		tmp = tmp->next;
-	}
-	array[i] = NULL;
-	return (array);
-}
-
-static void	expand_redir_filename(t_redir *redir, t_env **env)
-{
-	char	*expanded;
 	char	**matches;
 	int		i;
+
+	matches = expand_wildcard(redir->file);
+	if (!matches)
+		return (0);
+	if (matches[0] && matches[1])
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(redir->file, 2);
+		ft_putstr_fd(": ambiguous redirect\n", 2);
+		i = 0;
+		while (matches[i])
+			free(matches[i++]);
+		return (free(matches), 1);
+	}
+	else if (matches[0] && !matches[1])
+	{
+		free(redir->file);
+		redir->file = ft_strdup(matches[0]);
+	}
+	i = 0;
+	while (matches[i])
+		free(matches[i++]);
+	return (free(matches), 0);
+}
+
+static int	expand_redir_filename(t_redir *redir, t_env **env)
+{
+	char	*expanded;
 
 	expanded = expand_token_str(redir->file, env);
 	free(redir->file);
 	redir->file = expanded;
-	matches = expand_wildcard(redir->file);
-	if (matches)
-	{
-		if (matches[0] && !matches[1])
-		{
-			free(redir->file);
-			redir->file = ft_strdup(matches[0]);
-		}
-		i = 0;
-		while (matches[i])
-			free(matches[i++]);
-		free(matches);
-	}
 	expanded = ft_strip_quotes(redir->file, 0);
 	free(redir->file);
 	redir->file = expanded;
+	if (handle_wildcard(redir))
+		return (1);
+	return (0);
 }
 
-static void	expand_redirections(t_cmd *cmd, t_env **env)
+static int	expand_redirections(t_cmd *cmd, t_env **env)
 {
 	t_redir	*redir;
 
@@ -81,12 +64,16 @@ static void	expand_redirections(t_cmd *cmd, t_env **env)
 	while (redir)
 	{
 		if (redir->type != REDIR_HEREDOC)
-			expand_redir_filename(redir, env);
+		{
+			if (expand_redir_filename(redir, env))
+				return (1);
+		}
 		redir = redir->next;
 	}
+	return (0);
 }
 
-void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env)
+int	ft_expand_pipeline(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 
@@ -95,7 +82,9 @@ void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env)
 	{
 		if (cmd->content)
 			expand_command_args(cmd, env);
-		expand_redirections(cmd, env);
+		if (expand_redirections(cmd, env))
+			return (1);
 		cmd = cmd->next;
 	}
+	return (0);
 }

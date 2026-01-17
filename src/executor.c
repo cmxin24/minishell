@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:38:25 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 12:57:29 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 15:29:17 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,11 @@ void	ft_executor(t_ast *ast, t_env **env, int is_subshell)
 		return ;
 	if (ast->type == AST_PIPELINE)
 	{
-		ft_expand_pipeline(ast->pipeline, env);
+		if (ft_expand_pipeline(ast->pipeline, env))
+		{
+			g_signal = 1;
+			return ;
+		}
 		execute_pipeline(ast->pipeline, env, is_subshell);
 	}
 	else if (ast->type == AST_AND)

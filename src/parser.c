@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2026/01/05 18:01:40 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:10:59 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,15 @@ t_ast	*ft_parser(t_token **tokens)
 static t_cmd	*parse_single_command(t_token **temp, int i)
 {
 	t_cmd	*cmd;
+	int		arg_count;
 
 	if ((*temp)->type == L_PAREN)
 		return (parse_subshell(temp));
 	cmd = ft_new_cmd();
 	if (!cmd)
 		return (NULL);
-	cmd->content = malloc(sizeof(char *) * (ft_count_args(*temp) + 1));
+	arg_count = ft_count_args(*temp);
+	cmd->content = malloc(sizeof(char *) * (arg_count + 1));
 	if (!cmd->content)
 		return (NULL);
 	while (*temp && (*temp)->type != PIPE && (*temp)->type != AND
@@ -74,10 +76,8 @@ static t_cmd	*parse_single_command(t_token **temp, int i)
 			cmd->content[i++] = ft_strdup((*temp)->content);
 		else if ((*temp)->type == REDIRECT_IN || (*temp)->type == REDIRECT_OUT
 			|| (*temp)->type == APPEND || (*temp)->type == HEREDOC)
-		{
 			if (!ft_redirection(cmd, temp))
 				return (ft_free_cmd_list(cmd), NULL);
-		}
 		if (*temp)
 			*temp = (*temp)->next;
 	}
