@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 13:56:49 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 15:29:17 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ int		ft_len_without_quotes(char *str);
 char	*ft_strip_quotes(char *str, int len);
 char	*expand_token_str(char *str, t_env **env);
 void	ft_expander(t_ast *ast, t_env **env);
-void	ft_expand_pipeline(t_cmd *cmd_list, t_env **env);
+int		ft_expand_pipeline(t_cmd *cmd_list, t_env **env);
 char	**list_to_array(t_list *list);
 void	free_list_nodes(t_list *list);
 char	**ft_split_unquoted(char *str);
