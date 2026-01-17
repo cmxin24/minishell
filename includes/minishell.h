@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 17:48:42 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:15:47 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 #define CYAN "\033[0;36m"
+#define RED "\033[0;31m"
 #define RESET "\033[0m"
 
 # include <errno.h>
