@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:43:00 by meyu              #+#    #+#             */
-/*   Updated: 2026/01/17 13:03:13 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 17:50:03 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*ft_get_input(void)
 	char	*gnl_line;
 
 	if (isatty(STDIN_FILENO))
-		line = readline("minishell$ ");
+		line = readline(CYAN "minishell$ " RESET);
 	else
 	{
 		gnl_line = get_next_line(STDIN_FILENO);
