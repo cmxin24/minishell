@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 18:43:00 by meyu              #+#    #+#             */
-/*   Updated: 2025/12/21 18:09:33 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 13:24:29 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	has_unclosed_quote(char *str)
 			quote = 0;
 		i++;
 	}
-	return (quote != 0);
+	return (quote);
 }
 
 char	*read_quote_line(void)
