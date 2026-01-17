@@ -6,11 +6,12 @@
 /*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/13 15:36:55 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:47:39 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>
 
 char	*ft_get_env_value(t_env *head, char *key)
 {
@@ -28,7 +29,7 @@ void	ft_set_env_value(t_env **head, char *key, char *value)
 	t_env	*tmp;
 
 	tmp = *head;
-	while (tmp)
+	while (tmp->next)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
@@ -38,13 +39,14 @@ void	ft_set_env_value(t_env **head, char *key, char *value)
 		}
 		tmp = tmp->next;
 	}
-	tmp = (t_env *)malloc(sizeof(t_env));
-	if (!tmp)
+	tmp->next = (t_env *)malloc(sizeof(t_env));
+	if (!tmp->next)
 		return ;
-	tmp->key = ft_strdup(key);
-	tmp->value = ft_strdup(value);
-	tmp->next = NULL;
-	*head = tmp;
+	tmp->next->key = ft_strdup(key);
+	tmp->next->value = ft_strdup(value);
+	tmp->next->next = NULL;
+	if (tmp == (*head))
+		*head = tmp->next;
 	return ;
 }
 

@@ -6,11 +6,12 @@
 /*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 20:55:36 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/13 15:37:02 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:37:24 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>
 
 size_t	get_env_count(t_env *head)
 {
@@ -32,4 +33,14 @@ char	*env_to_str(t_env *node)
 	str = ft_strjoin(node->key, "=");
 	str = ft_strjoin(str, node->value);
 	return (str);
+}
+
+void	print_env(t_env *head)
+{
+	while (head)
+	{
+		printf("%s = %s\n", head->key, head->value);
+		head = head->next;
+	}
+	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2026/01/13 15:28:29 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:37:53 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ void	ft_unset_env(t_env **env, char *key);
 char	**ft_env_list_to_array(t_env *env_list);
 size_t	get_env_count(t_env *head);
 char	*env_to_str(t_env *node);
+void	print_env(t_env *head);
 
 // built-in functions
 int		ft_pwd(void);
