@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 21:28:10 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 13:52:20 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 15:22:03 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,28 @@ int	ft_is_valid_identifier(char *str)
 	return (1);
 }
 
-void	ft_indentifier_error(char *cmd, char *arg)
+static int	is_overflow(char *str)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": `", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
+	int		len;
+	char	*max;
+	int		neg;
+
+	neg = 0;
+	if (*str == '-' || *str == '+')
+		if (*str++ == '-')
+			neg = 1;
+	while (*str == '0' && *(str + 1))
+		str++;
+	len = ft_strlen(str);
+	if (len > 19)
+		return (1);
+	if (len < 19)
+		return (0);
+	if (neg)
+		max = "9223372036854775808";
+	else
+		max = "9223372036854775807";
+	return (ft_strcmp(str, max) > 0);
 }
 
 int	ft_check_exit(char *str)
@@ -58,6 +73,8 @@ int	ft_check_exit(char *str)
 			return (0);
 		i++;
 	}
+	if (is_overflow(str))
+		return (0);
 	return (1);
 }
 
