@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 13:03:11 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 15:14:34 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,24 +90,12 @@ static char	*ft_read_until_quotes_closed(char *line)
 	return (line);
 }
 
-/**
- * @brief main function of minishell
- * @note
- * if user input EOF(Ctrl+D), then (!line), minishell will exit
- * isatty() check if the input is from terminal, only add history from terminal
- */
-int	main(int argc, char **argv, char **envp)
+static void	minishell_loop(t_env *env_list)
 {
 	char	*line;
 	char	**lines;
-	t_env	*env_list;
 
-	(void)argc;
-	(void)argv;
 	lines = NULL;
-	ft_init_signals();
-	ft_disable_echo_ctl();
-	env_list = ft_init_env(envp);
 	while (1)
 	{
 		line = ft_get_input();
@@ -123,6 +111,24 @@ int	main(int argc, char **argv, char **envp)
 		if (!isatty(STDIN_FILENO) && g_signal == 2)
 			break ;
 	}
+}
+
+/**
+ * @brief main function of minishell
+ * @note
+ * if user input EOF(Ctrl+D), then (!line), minishell will exit
+ * isatty() check if the input is from terminal, only add history from terminal
+ */
+int	main(int argc, char **argv, char **envp)
+{
+	t_env	*env_list;
+
+	(void)argc;
+	(void)argv;
+	ft_init_signals();
+	ft_disable_echo_ctl();
+	env_list = ft_init_env(envp);
+	minishell_loop(env_list);
 	ft_free_env_list(env_list);
 	return (rl_clear_history(), g_signal);
 }

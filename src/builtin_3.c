@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 21:28:10 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 00:05:14 by xin              ###   ########.fr       */
+/*   Updated: 2026/01/17 13:52:20 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,29 +61,47 @@ int	ft_check_exit(char *str)
 	return (1);
 }
 
+int	cd_get_arg_index(char **args, int *idx)
+{
+	*idx = 1;
+	if (args[1] && ft_strcmp(args[1], "--") == 0)
+	{
+		(*idx)++;
+		if (args[*idx] && args[*idx + 1])
+			return (ft_putstr_fd(
+					"minishell: cd: too many arguments\n", 2), 1);
+	}
+	else if (args[1] && args[2])
+		return (ft_putstr_fd(
+				"minishell: cd: too many arguments\n", 2), 1);
+	return (0);
+}
+
 int	cd_get_target_path(char **args, t_env **env, char **path, int *print_path)
 {
 	char	*tmp;
+	int		idx;
 
 	tmp = NULL;
 	*print_path = 0;
-	if (args[1] && args[2])
-		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2), 1);
-	if (args[1] == NULL)
+	if (cd_get_arg_index(args, &idx))
+		return (1);
+	if (args[idx] == NULL)
 	{
 		*path = ft_get_env_value(*env, "HOME");
 		if (*path == NULL || **path == '\0')
 			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
 	}
-	else if (ft_strcmp(args[1], "-") == 0)
+	else if (idx == 1 && ft_strcmp(args[idx], "-") == 0)
 	{
 		tmp = ft_get_env_value(*env, "OLDPWD");
 		if (tmp == NULL)
-			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2), 1);
+			return (ft_putstr_fd(
+					"minishell: cd: OLDPWD not set\n", 2), 1);
 		*path = ft_strdup(tmp);
 		*print_path = 1;
 	}
 	else
-		*path = args[1];
+		*path = args[idx];
 	return (0);
 }

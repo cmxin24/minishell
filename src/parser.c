@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:14:23 by xin               #+#    #+#             */
-/*   Updated: 2025/12/22 16:40:11 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/17 15:10:59 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,8 @@ static t_cmd	*parse_single_command(t_token **temp, int i)
 			cmd->content[i++] = ft_strdup((*temp)->content);
 		else if ((*temp)->type == REDIRECT_IN || (*temp)->type == REDIRECT_OUT
 			|| (*temp)->type == APPEND || (*temp)->type == HEREDOC)
-		{
 			if (!ft_redirection(cmd, temp))
 				return (ft_free_cmd_list(cmd), NULL);
-		}
 		if (*temp)
 			*temp = (*temp)->next;
 	}
