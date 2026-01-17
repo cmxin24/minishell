@@ -6,11 +6,12 @@
 /*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/17 17:28:50 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:09:50 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>
 
 char	*ft_get_env_value(t_env *head, char *key)
 {
@@ -26,9 +27,11 @@ char	*ft_get_env_value(t_env *head, char *key)
 void	ft_set_env_value(t_env **head, char *key, char *value)
 {
 	t_env	*tmp;
+	t_env	*last;
 
 	tmp = *head;
-	while (tmp->next)
+	last = NULL;
+	while (tmp)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
@@ -36,16 +39,17 @@ void	ft_set_env_value(t_env **head, char *key, char *value)
 			tmp->value = ft_strdup(value);
 			return ;
 		}
+		last = tmp;
 		tmp = tmp->next;
 	}
-	tmp->next = (t_env *)malloc(sizeof(t_env));
-	if (!tmp->next)
+	last->next = (t_env *)malloc(sizeof(t_env));
+	if (!last->next)
 		return ;
-	tmp->next->key = ft_strdup(key);
-	tmp->next->value = ft_strdup(value);
-	tmp->next->next = NULL;
-	if (tmp == (*head))
-		*head = tmp->next;
+	last->next->key = ft_strdup(key);
+	last->next->value = ft_strdup(value);
+	last->next->next = NULL;
+	if (last == (*head))
+		*head = last->next;
 	return ;
 }
 
