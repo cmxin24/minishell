@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 23:46:06 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 17:27:30 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/18 17:05:04 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,11 @@ void	child_execute_cmd(t_cmd *cmd, t_env **env, char **env_array)
 	exit(1);
 }
 
+/**
+ * @brief initialize signal handlers for child process
+ * @note
+ * SIGINT, SIGQUIT, SIGPIPE set to default behavior
+ */
 static void	init_child_signals(void)
 {
 	struct sigaction	sa;

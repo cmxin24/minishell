@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2026/01/18 16:44:58 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/18 17:04:58 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,17 @@ static char	*ft_read_until_quotes_closed(char *line)
 	return (line);
 }
 
+/**
+ * @brief main loop of minishell
+ * @note
+ * repeatedly get user input, process it, and execute commands
+ * if input is EOF (Ctrl+D), exit the loop
+ * if input has unclosed quotes, keep reading until quotes are closed
+ * isatty() check if the input is from terminal, only add history from terminal
+ * add non-empty input lines to history when input is from terminal
+ * process each complete line of input
+ * if input is from non-terminal and a SIGINT was received, exit the loop
+ */
 static void	minishell_loop(t_env *env_list)
 {
 	char	*line;
@@ -118,8 +129,9 @@ static void	minishell_loop(t_env *env_list)
 /**
  * @brief main function of minishell
  * @note
- * if user input EOF(Ctrl+D), then (!line), minishell will exit
- * isatty() check if the input is from terminal, only add history from terminal
+ * initialize signal handlers and environment variables
+ * enter the main loop to process user input
+ * free environment list and clear history on exit
  */
 int	main(int argc, char **argv, char **envp)
 {
