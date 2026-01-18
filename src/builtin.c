@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/07 02:14:20 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 17:18:36 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/18 17:55:49 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,12 @@ int	ft_cd(char **args, t_env **env)
 		return (1);
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		ft_set_env_value(env, "OLDPWD", cwd);
-	if (chdir(path) != 0)
-	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		perror(path);
-		if (print_path)
-			free(path);
+	if (change_directory(path, print_path))
 		return (1);
-	}
 	if (print_path)
 	{
-		printf("%s\n", path);
+		ft_putstr_fd(path, 1);
+		write(1, "\n", 1);
 		free(path);
 	}
 	if (getcwd(cwd, sizeof(cwd)) != NULL)

@@ -6,7 +6,7 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:13:06 by xin               #+#    #+#             */
-/*   Updated: 2026/01/18 16:12:33 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/18 17:55:10 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ int		exec_builtin(char **args, t_env **env, int is_child);
 int		ft_is_valid_identifier(char *str);
 void	ft_indentifier_error(char *cmd, char *arg);
 int		ft_check_exit(char *str);
+int		change_directory(char *path, int print_path);
 
 // parser functions
 t_ast	*ft_parser(t_token **tokens);
