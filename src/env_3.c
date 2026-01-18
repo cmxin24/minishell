@@ -6,12 +6,11 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 20:55:36 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/18 16:11:26 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/18 16:45:12 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <stdio.h>
 
 size_t	get_env_count(t_env *head)
 {

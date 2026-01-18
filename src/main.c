@@ -6,12 +6,11 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2026/01/18 15:24:33 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/18 16:44:58 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <stdio.h>
 
 /**
  * @brief process a single line of input
