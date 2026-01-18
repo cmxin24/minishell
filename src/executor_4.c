@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xin <xin@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/21 23:43:18 by xin               #+#    #+#             */
-/*   Updated: 2025/12/21 23:49:26 by xin              ###   ########.fr       */
+/*   Updated: 2026/01/18 16:57:46 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*find_command_path(char *cmd, char **envp, int i, char *temp)
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
-		paths = ft_split("/usr/local/bin:/usr/bin:/bin", ':');
+		return (NULL);
 	else
 		paths = ft_split(envp[i] + 5, ':');
 	i = 0;
