@@ -6,11 +6,12 @@
 /*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/29 21:29:02 by xin               #+#    #+#             */
-/*   Updated: 2026/01/17 15:14:34 by meyu             ###   ########.fr       */
+/*   Updated: 2026/01/18 15:24:33 by nschneid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>
 
 /**
  * @brief process a single line of input
@@ -24,16 +25,18 @@ static void	ft_process_line(char *line, t_env **env_list)
 {
 	t_ast	*ast;
 	t_token	*token_list;
+	t_token	*token_head;
 
 	if (!line || *line == '\0')
 		return ;
 	token_list = ft_lexer(line);
+	token_head = token_list;
 	if (!token_list)
 		return ;
 	ast = ft_parser(&token_list);
 	if (ast && ft_process_heredoc(ast, *env_list) == 0)
 		ft_executor(ast, env_list, 0);
-	ft_free_tokens(&token_list);
+	ft_free_tokens(&token_head);
 	ft_free_ast(ast);
 }
 
