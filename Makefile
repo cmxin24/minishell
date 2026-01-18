@@ -6,7 +6,7 @@
 #    By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/25 13:28:44 by xin               #+#    #+#              #
-#    Updated: 2026/01/17 17:29:39 by nschneid         ###   ########.fr        #
+#    Updated: 2026/01/18 16:11:48 by meyu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ SRCS 		:=	src/main.c			\
 				src/expander_7.c	\
 				src/env.c			\
 				src/env_2.c			\
-				src/env_utils.c		\
+				src/env_3.c			\
 				src/builtin.c		\
 				src/builtin_2.c		\
 				src/builtin_3.c		\

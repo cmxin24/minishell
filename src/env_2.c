@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nschneid <nschneid@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: meyu <meyu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 18:54:49 by nschneid          #+#    #+#             */
-/*   Updated: 2026/01/17 18:09:50 by nschneid         ###   ########.fr       */
+/*   Updated: 2026/01/18 16:11:05 by meyu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,62 +22,6 @@ char	*ft_get_env_value(t_env *head, char *key)
 		head = head->next;
 	}
 	return (NULL);
-}
-
-void	ft_set_env_value(t_env **head, char *key, char *value)
-{
-	t_env	*tmp;
-	t_env	*last;
-
-	tmp = *head;
-	last = NULL;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->key, key) == 0)
-		{
-			free(tmp->value);
-			tmp->value = ft_strdup(value);
-			return ;
-		}
-		last = tmp;
-		tmp = tmp->next;
-	}
-	last->next = (t_env *)malloc(sizeof(t_env));
-	if (!last->next)
-		return ;
-	last->next->key = ft_strdup(key);
-	last->next->value = ft_strdup(value);
-	last->next->next = NULL;
-	if (last == (*head))
-		*head = last->next;
-	return ;
-}
-
-void	ft_append_env_value(t_env **head, char *key, char *value)
-{
-	t_env	*tmp;
-	char	*str;
-
-	tmp = *head;
-	while (tmp)
-	{
-		if (ft_strcmp(tmp->key, key) == 0)
-		{
-			str = ft_strjoin(tmp->value, value);
-			free(tmp->value);
-			tmp->value = str;
-			return ;
-		}
-		tmp = tmp->next;
-	}
-	tmp = (t_env *)malloc(sizeof(t_env));
-	if (!tmp)
-		return ;
-	tmp->key = ft_strdup(key);
-	tmp->value = ft_strdup(value);
-	tmp->next = NULL;
-	*head = tmp;
-	return ;
 }
 
 void	ft_unset_env(t_env **head, char *key)
